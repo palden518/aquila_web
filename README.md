@@ -15,8 +15,8 @@
    composer install
 
    ```
-   NOTE: Please make sure that you have installed the package manager composer
-   
+   NOTE: Please make sure that you have installed the package manager 'composer'
+
 3. Run app
 
     ```
