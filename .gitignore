@@ -4,3 +4,11 @@ node_modules/
 *.log
 build/
 .DS_Store
+# Laravel core dependencies and package managers
+/vendor/
+/node_modules/
+
+# Local environment configuration variables
+.env
+.env.backup
+.env.production
