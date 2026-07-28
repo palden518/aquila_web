@@ -4,6 +4,8 @@ node_modules/
 *.log
 build/
 .DS_Store
+*.swp
+
 # Laravel core dependencies and package managers
 /vendor/
 /node_modules/
