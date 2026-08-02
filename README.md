@@ -17,7 +17,33 @@
    ```
    NOTE: Please make sure that you have installed the package manager 'composer'
 
-3. Run app
+3. Install mysql
+   
+   ```
+   mysql -u root -p
+
+   ```
+
+
+   ```
+   CREATE DATABASE aquila
+
+   ```
+
+   NOTE: Run given .sql script in aquila database to populate database
+
+4. Migrate and seed database
+   
+   ```
+   php artisan migrate
+
+   ```
+
+   ```
+   php artisan db:seed
+   ```
+
+5. Run app
 
     ```
     php artisan serve
