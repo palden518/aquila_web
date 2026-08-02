@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,13 +36,13 @@
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#specials">Specials &amp; packages</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#about">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
                 </ul>
-                <a href="{{ route('home') }}#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
-                <a href="{{ route('home') }}#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
+                <a href="#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
+                <a href="#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
             </div>
         </div>
     </nav>
@@ -76,6 +75,31 @@
             </div>
         </div>
     </div>
+
+    {{-- ============================= BOOK A TABLE / CATERING ENQUIRY ============================= --}}
+    <section class="section-padded aq-section-indigo" id="reserve">
+        <div class="container">
+            <span class="eyebrow on-dark">Contact and reservations</span>
+            <h2 class="section-heading aq-heading-on-dark mb-2">
+                Book a <span class="text-gold-italic">table</span>
+            </h2>
+            <p class="aq-copy-on-dark mb-4">
+                Reservations, catering enquiries, and general contact — we're here seven days a week.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <x-reservation-form theme="dark" />
+                </div>
+                <div class="col-lg-6">
+                    <x-catering-enquiry-form
+                        theme="dark"
+                        subheading="Office lunches, corporate functions, and catering delivery."
+                        event-type="corporate" />
+                </div>
+            </div>
+        </div>
+    </section>
 
     {{-- ============================= CONTACT FORM + DETAILS ============================= --}}
     <section class="section-padded">
@@ -229,7 +253,7 @@
                     <div class="footer-col-title">Explore</div>
                     <ul>
                         <li><a href="{{ route('menu') }}">Menu</a></li>
-                        <li><a href="{{ route('home') }}#specials">Specials and packages</a></li>
+                        <li><a href="{{ route('specials') }}">Specials and packages</a></li>
                         <li><a href="{{ route('events') }}">Events and catering</a></li>
                         <li><a href="{{ route('home') }}#about">About</a></li>
                         <li><a href="{{ route('contact') }}">Contact</a></li>

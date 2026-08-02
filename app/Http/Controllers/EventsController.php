@@ -23,7 +23,7 @@ class EventsController extends Controller
 
     public function storeEnquiry(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        $validated = $request->validateWithBag('catering', [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
@@ -42,10 +42,8 @@ class EventsController extends Controller
 
         $this->notifyAdmin($enquiry);
 
-        return redirect()
-            ->route('events')
-            ->with('enquiry_success', 'Thanks — your enquiry has been received. Our events team will be in touch shortly.')
-            ->withFragment('inquiry');
+        return back()
+            ->with('enquiry_success', 'Thanks — your enquiry has been received. Our events team will be in touch shortly.');
     }
 
     protected function notifyAdmin(CateringEnquiry $enquiry): void

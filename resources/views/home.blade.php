@@ -36,13 +36,13 @@
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#specials">Specials &amp; packages</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
                 </ul>
-                <a href="#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
-                <a href="#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
+                <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
+                <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
             </div>
         </div>
     </nav>
@@ -57,7 +57,7 @@
                     <p class="hero-copy">{{ $content['hero_copy'] }}</p>
                     <div class="hero-actions">
                         <a href="{{ route('menu') }}" class="btn btn-aquila-gold">View our menu</a>
-                        <a href="#reserve" class="btn btn-aquila-outline">Make a reservation</a>
+                        <a href="/contact" class="btn btn-aquila-outline">Make a reservation</a>
                     </div>
                 </div>
 
@@ -262,7 +262,7 @@
             <span class="eyebrow">— Plan your visit —</span>
             <h2 class="cta-heading">Reserve your table or enquire about <span class="text-gold-italic">catering</span></h2>
             <p class="cta-copy">Open 7 days for dining, bar service, and events. Reach out for reservations, catering, or corporate functions.</p>
-            <a href="#contact" class="btn btn-aquila-gold">Get in touch</a>
+            <a href="/contact" class="btn btn-aquila-gold">Get in touch</a>
         </div>
     </section>
 
@@ -287,7 +287,7 @@
                     <div class="footer-col-title">Explore</div>
                     <ul>
                         <li><a href="{{ route('menu') }}">Menu</a></li>
-                        <li><a href="#specials">Specials and packages</a></li>
+                        <li><a href="{{ route('specials') }}">Specials and packages</a></li>
                         <li><a href="#events">Events and catering</a></li>
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>

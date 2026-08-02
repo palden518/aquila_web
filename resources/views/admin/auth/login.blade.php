@@ -22,6 +22,7 @@
                     </ul>
                 </div>
             @endif
+
             <form method="POST" action="{{ route('admin.login.attempt') }}">
                 @csrf
                 <div class="mb-3">
@@ -43,6 +44,7 @@
             </form>
         </div>
     </div>
+
     <script>
         document.getElementById('togglePassword').addEventListener('click', function () {
             const input = document.getElementById('password');

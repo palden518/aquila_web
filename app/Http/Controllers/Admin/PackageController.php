@@ -12,7 +12,7 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $packages = Package::orderBy('price')->get();
+        $packages = Package::orderByDesc('is_popular')->orderBy('sort_order')->orderBy('price')->get();
 
         return view('admin.packages.index', compact('packages'));
     }
@@ -27,6 +27,7 @@ class PackageController extends Controller
         $data = $this->validated($request);
         $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
+        $data['is_popular'] = $request->boolean('is_popular');
 
         Package::create($data);
 
@@ -43,6 +44,7 @@ class PackageController extends Controller
         $data = $this->validated($request, $package->id);
         $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
+        $data['is_popular'] = $request->boolean('is_popular');
 
         $package->update($data);
 
@@ -60,11 +62,13 @@ class PackageController extends Controller
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
             'slug' => ['nullable', 'alpha_dash', 'max:255', 'unique:packages,slug' . ($ignoreId ? ",{$ignoreId}" : '')],
             'description' => ['nullable', 'string', 'max:2000'],
-            'price' => ['required', 'numeric', 'min:0'],
+            'price' => ['nullable', 'numeric', 'min:0'],
             'inclusions' => ['nullable', 'string', 'max:2000'],
             'image' => ['nullable', 'url', 'max:255'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
         ]);
     }
 }

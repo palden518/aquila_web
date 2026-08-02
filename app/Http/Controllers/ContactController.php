@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Mail\ContactMessageReceived;
 use App\Models\ContactMessage;
 use App\Models\NotificationLog;
