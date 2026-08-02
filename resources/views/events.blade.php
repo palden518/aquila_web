@@ -39,7 +39,7 @@
                     <li class="nav-item"><a class="nav-link" href="#specials">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
                 </ul>
                 <a href="#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
                 <a href="#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
@@ -143,20 +143,31 @@
                     </div>
                 </div>
 
-                <div class="row stats-row text-center text-white mt-5">
-                    <div class="col-md-4">
-                        <p class="small text-uppercase mb-1">Venue capacity</p>
-                        <strong>200 guests</strong>
+                @if ($packages->isNotEmpty())
+                    <div class="row stats-row text-center text-white mt-5">
+                        @foreach ($packages as $package)
+                            <div class="col-md-4">
+                                <p class="small text-uppercase mb-1">{{ $package->name }}</p>
+                                <strong>${{ number_format($package->price, 0) }}</strong>
+                            </div>
+                        @endforeach
                     </div>
-                    <div class="col-md-4">
-                        <p class="small text-uppercase mb-1">Guest comfort</p>
-                        <strong>100 seated</strong>
+                @else
+                    <div class="row stats-row text-center text-white mt-5">
+                        <div class="col-md-4">
+                            <p class="small text-uppercase mb-1">Venue capacity</p>
+                            <strong>200 guests</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="small text-uppercase mb-1">Guest comfort</p>
+                            <strong>100 seated</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="small text-uppercase mb-1">Service hours</p>
+                            <strong>7am–12am</strong>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <p class="small text-uppercase mb-1">Service hours</p>
-                        <strong>7am–12am</strong>
-                    </div>
-                </div>
+                @endif
             </div>
         </section>
 
@@ -215,32 +226,56 @@
                     <div class="col-lg-6">
                         <div class="inquiry-panel p-4">
                             <h3 class="h4 mb-3">Send a Catering Inquiry</h3>
-                            <form>
+
+                            @if (session('enquiry_success'))
+                                <div class="alert alert-success">{{ session('enquiry_success') }}</div>
+                            @endif
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('events.enquiry.store') }}">
+                                @csrf
                                 <div class="mb-3">
                                     <label class="form-label text-white">Name</label>
-                                    <input type="text" class="form-control" placeholder="Your name">
+                                    <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Your name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-white">Email</label>
-                                    <input type="email" class="form-control" placeholder="you@example.com">
+                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="you@example.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-white">Phone</label>
+                                    <input type="text" name="phone" value="{{ old('phone') }}" class="form-control" placeholder="Your phone number" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-white">Date</label>
-                                    <input type="date" class="form-control">
+                                    <input type="date" name="event_date" value="{{ old('event_date') }}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-white">Guest count</label>
-                                    <input type="number" class="form-control" placeholder="Approximate guests">
+                                    <input type="number" name="guest_count" value="{{ old('guest_count') }}" class="form-control" placeholder="Approximate guests" min="1" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-white">Event type</label>
-                                    <select class="form-select">
-                                        <option selected>Choose an option</option>
-                                        <option>Corporate</option>
-                                        <option>Wedding</option>
-                                        <option>Private party</option>
-                                        <option>Off-site catering</option>
+                                    <select class="form-select" name="event_type">
+                                        <option value="" selected>Choose an option</option>
+                                        <option value="corporate" {{ old('event_type') === 'corporate' ? 'selected' : '' }}>Corporate</option>
+                                        <option value="wedding" {{ old('event_type') === 'wedding' ? 'selected' : '' }}>Wedding</option>
+                                        <option value="private_party" {{ old('event_type') === 'private_party' ? 'selected' : '' }}>Private party</option>
+                                        <option value="off_site" {{ old('event_type') === 'off_site' ? 'selected' : '' }}>Off-site catering</option>
                                     </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-white">Message</label>
+                                    <textarea class="form-control" name="message" rows="3" placeholder="Tell us about your event">{{ old('message') }}</textarea>
                                 </div>
                                 <button type="submit" class="btn btn-aquila-gold w-100">Submit inquiry</button>
                             </form>
@@ -261,7 +296,7 @@
                     <div class="col-lg-5">
                         <div class="price-panel p-4">
                             <span class="eyebrow text-dark">From</span>
-                            <h3 class="display-6 mb-2">$4,000</h3>
+                            <h3 class="display-6 mb-2">${{ $packages->min('price') ? number_format($packages->min('price'), 0) : '4,000' }}</h3>
                             <p class="mb-0">Minimum event and catering investment for full-service booking.</p>
                         </div>
                     </div>

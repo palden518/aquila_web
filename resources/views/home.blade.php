@@ -39,7 +39,7 @@
                     <li class="nav-item"><a class="nav-link" href="#specials">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
                 </ul>
                 <a href="#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
                 <a href="#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
@@ -53,8 +53,8 @@
             <div class="row align-items-center gy-5">
                 <div class="col-lg-5">
                     <span class="eyebrow">Brisbane City — Est. 20+ years</span>
-                    <h1 class="hero-heading">Fine dining and catering for <em>business and leisure</em></h1>
-                    <p class="hero-copy">The Aquila is Brisbane's trusted destination for Italian and Australian cuisine — serving regulars, office professionals, and business meetings, seven days a week.</p>
+                    <h1 class="hero-heading">{!! $content['hero_heading'] !!}</h1>
+                    <p class="hero-copy">{{ $content['hero_copy'] }}</p>
                     <div class="hero-actions">
                         <a href="{{ route('menu') }}" class="btn btn-aquila-gold">View our menu</a>
                         <a href="#reserve" class="btn btn-aquila-outline">Make a reservation</a>
@@ -93,10 +93,10 @@
                     <div class="info-item"><span class="dot">•</span><span>Brisbane City</span></div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="info-item"><span class="dot">•</span><span>044 792 5110</span></div>
+                    <div class="info-item"><span class="dot">•</span><span>{{ $content['phone'] }}</span></div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="info-item"><span class="dot">•</span><span>hello@aquila.net.au</span></div>
+                    <div class="info-item"><span class="dot">•</span><span>{{ $content['email'] }}</span></div>
                 </div>
             </div>
         </div>
@@ -107,33 +107,64 @@
         <div class="container">
             <span class="eyebrow">Why Aquila</span>
             <h2 class="section-heading">Trusted by Brisbane for <span class="text-gold-italic">two decades</span></h2>
-            <p class="section-lede">From business lunches to evening dining, The Aquila offers a refined yet welcoming space for our regulars, office professionals, and corporate guests.</p>
+            <p class="section-lede">{{ $content['about_lede'] }}</p>
 
             <div class="row g-4 mt-2">
                 <div class="col-lg-3 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon"></div>
+                    <div class="feature-card" style="text-align:center;">
+                        <div class="feature-icon" style="display:flex;align-items:center;justify-content:center;margin:0 auto;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 2v6a2 2 0 0 0 2 2v12"></path>
+                                <path d="M7 2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2"></path>
+                                <path d="M17 2a5 5 0 0 0-5 5v15"></path>
+                                <path d="M17 2v8"></path>
+                            </svg>
+                        </div>
                         <h3>Italian and Australian</h3>
                         <p>A unique menu blending Italian classics with modern Australian dining.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon"></div>
+                    <div class="feature-card" style="text-align:center;">
+                        <div class="feature-icon" style="display:flex;align-items:center;justify-content:center;margin:0 auto;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                        </div>
                         <h3>Business friendly</h3>
                         <p>A trusted spot for meetings, client lunches, and the weekday office crowd.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon"></div>
+                    <div class="feature-card" style="text-align:center;">
+                        <div class="feature-icon" style="display:flex;align-items:center;justify-content:center;margin:0 auto;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                                <path d="M16 2v4"></path>
+                                <path d="M8 2v4"></path>
+                                <path d="M3 10h18"></path>
+                                <path d="M8 14h.01"></path>
+                                <path d="M12 14h.01"></path>
+                                <path d="M16 14h.01"></path>
+                                <path d="M8 18h.01"></path>
+                                <path d="M12 18h.01"></path>
+                            </svg>
+                        </div>
                         <h3>Corporate events</h3>
                         <p>Functions and corporate events tailored to your business needs.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="feature-card">
-                        <div class="feature-icon"></div>
+                    <div class="feature-card" style="text-align:center;">
+                        <div class="feature-icon" style="display:flex;align-items:center;justify-content:center;margin:0 auto;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
                         <h3>Catering</h3>
                         <p>Catering for offices and functions, with confirmation by SMS and email.</p>
                     </div>
@@ -143,28 +174,30 @@
     </section>
 
     {{-- ============================= WEEKLY SPECIAL ============================= --}}
-    <section class="section-padded pt-0" id="specials">
-        <div class="container">
-            <span class="eyebrow">This week</span>
-            <h2 class="section-heading mb-4">Weekly <span class="text-gold-italic">special</span></h2>
+    @if ($weeklySpecial)
+        <section class="section-padded pt-0" id="specials">
+            <div class="container">
+                <span class="eyebrow">This week</span>
+                <h2 class="section-heading mb-4">Weekly <span class="text-gold-italic">special</span></h2>
 
-            <div class="special-card">
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="special-image" style="background-image:url('https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=900&q=80');"></div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="special-body">
-                            <span class="badge-week">This week only</span>
-                            <h3>Chef's seasonal risotto</h3>
-                            <p>A rotating dish crafted weekly by our head chef, showcasing seasonal produce paired with Italian technique. Available for both dine-in and takeaway.</p>
-                            <div class="special-price">$28 <span>per serve</span></div>
+                <div class="special-card">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="special-image" style="background-image:url('{{ $weeklySpecial->image ?: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=900&q=80' }}');"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="special-body">
+                                <span class="badge-week">This week only</span>
+                                <h3>{{ $weeklySpecial->name }}</h3>
+                                <p>{{ $weeklySpecial->description }}</p>
+                                <div class="special-price">{{ $weeklySpecial->display_price }} <span>per serve</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
 
     {{-- ============================= A SPACE FOR EVERY OCCASION ============================= --}}
     <section class="section-padded" id="events">
@@ -266,8 +299,8 @@
                     <ul>
                         <li>Brisbane City, Queensland</li>
                         <li>Open 7 days</li>
-                        <li><a href="tel:0447925110">044 792 5110</a></li>
-                        <li><a href="mailto:hello@aquila.net.au">hello@aquila.net.au</a></li>
+                        <li><a href="tel:{{ preg_replace('/\s+/', '', $content['phone']) }}">{{ $content['phone'] }}</a></li>
+                        <li><a href="mailto:{{ $content['email'] }}">{{ $content['email'] }}</a></li>
                     </ul>
                 </div>
 
