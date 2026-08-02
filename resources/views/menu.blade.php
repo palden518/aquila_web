@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Aquila Menu</title>
 
@@ -14,16 +12,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cagliostro&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cagliostro&display=swap"
+        rel="stylesheet">
 
     {{-- Bootstrap CSS --}}
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     {{-- Existing project CSS --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -33,14 +26,15 @@
 <body class="aquila-menu-page">
 
     {{-- Navbar --}}
-     <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
+    <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ asset('images/logo.webp') }}" alt="The Aquila logo">
                 AQUILA
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#aquilaNav" aria-controls="aquilaNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#aquilaNav"
+                aria-controls="aquilaNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon-custom">
                     <span></span><span></span><span></span>
                 </span>
@@ -48,15 +42,19 @@
 
             <div class="collapse navbar-collapse" id="aquilaNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#specials">Specials &amp; packages</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                            href="{{ route('home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}"
+                            href="{{ route('menu') }}">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('specials') }}">Specials &amp; packages</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}"
+                            href="{{ route('events') }}">Events &amp; catering</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 </ul>
-                <a href="#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
-                <a href="#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
+                <a href="{{ route('booking.preview') }}" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
+                <a href="{{ route('booking.preview') }}" class="btn btn-aquila-gold d-lg-none">Book a table</a>
             </div>
         </div>
     </nav>
@@ -88,27 +86,18 @@
             <div class="row g-4 mt-4">
 
                 <div class="col-md-4">
-                    <img
-                        src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=900&q=80"
-                        alt="Breakfast food"
-                        class="img-fluid menu-hero-image"
-                    >
+                    <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=900&q=80"
+                        alt="Breakfast food" class="img-fluid menu-hero-image">
                 </div>
 
                 <div class="col-md-4">
-                    <img
-                        src="https://images.unsplash.com/photo-1547592180-85f173990554?w=900&q=80"
-                        alt="Lunch food"
-                        class="img-fluid menu-hero-image"
-                    >
+                    <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=900&q=80" alt="Lunch food"
+                        class="img-fluid menu-hero-image">
                 </div>
 
                 <div class="col-md-4">
-                    <img
-                        src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=900&q=80"
-                        alt="Pizza"
-                        class="img-fluid menu-hero-image"
-                    >
+                    <img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=900&q=80" alt="Pizza"
+                        class="img-fluid menu-hero-image">
                 </div>
 
             </div>
@@ -122,45 +111,27 @@
 
             <div class="d-flex flex-wrap justify-content-center gap-2">
 
-                <a
-                    href="#breakfast"
-                    class="btn menu-category-button"
-                >
+                <a href="#breakfast" class="btn menu-category-button">
                     Breakfast
                 </a>
 
-                <a
-                    href="#lunch"
-                    class="btn menu-category-button"
-                >
+                <a href="#lunch" class="btn menu-category-button">
                     Lunch
                 </a>
 
-                <a
-                    href="#mains"
-                    class="btn menu-category-button"
-                >
+                <a href="#mains" class="btn menu-category-button">
                     Mains
                 </a>
 
-                <a
-                    href="#salads"
-                    class="btn menu-category-button"
-                >
+                <a href="#salads" class="btn menu-category-button">
                     Salads
                 </a>
 
-                <a
-                    href="#pizza"
-                    class="btn menu-category-button"
-                >
+                <a href="#pizza" class="btn menu-category-button">
                     Pizza
                 </a>
 
-                <a
-                    href="#sharing"
-                    class="btn menu-category-button"
-                >
+                <a href="#sharing" class="btn menu-category-button">
                     To Share
                 </a>
 
@@ -172,10 +143,7 @@
     <main>
 
         {{-- Breakfast --}}
-        <section
-            id="breakfast"
-            class="menu-section py-5"
-        >
+        <section id="breakfast" class="menu-section py-5">
             <div class="container">
 
                 <div class="row align-items-end mb-4">
@@ -271,10 +239,7 @@
         </section>
 
         {{-- Lunch --}}
-        <section
-            id="lunch"
-            class="menu-section py-5"
-        >
+        <section id="lunch" class="menu-section py-5">
             <div class="container">
 
                 <div class="row align-items-end mb-4">
@@ -370,10 +335,7 @@
         </section>
 
         {{-- Mains --}}
-        <section
-            id="mains"
-            class="menu-section py-5"
-        >
+        <section id="mains" class="menu-section py-5">
             <div class="container">
 
                 <span class="menu-eyebrow">
@@ -409,11 +371,8 @@
 
                         <div class="col-lg-4">
 
-                            <img
-                                src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80"
-                                alt="Featured dinner"
-                                class="featured-menu-image"
-                            >
+                            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80"
+                                alt="Featured dinner" class="featured-menu-image">
 
                         </div>
 
@@ -484,10 +443,7 @@
         </section>
 
         {{-- Salads --}}
-        <section
-            id="salads"
-            class="menu-section py-5"
-        >
+        <section id="salads" class="menu-section py-5">
             <div class="container">
 
                 <span class="menu-eyebrow">
@@ -561,10 +517,7 @@
         </section>
 
         {{-- Pizza --}}
-        <section
-            id="pizza"
-            class="menu-section py-5"
-        >
+        <section id="pizza" class="menu-section py-5">
             <div class="container">
 
                 <span class="menu-eyebrow">
@@ -638,10 +591,7 @@
         </section>
 
         {{-- Sharing --}}
-        <section
-            id="sharing"
-            class="menu-section py-5"
-        >
+        <section id="sharing" class="menu-section py-5">
             <div class="container">
 
                 <span class="menu-eyebrow">
@@ -732,10 +682,7 @@
 
                 <div class="col-md-6 text-md-end">
 
-                    <a
-                        href="{{ route('home') }}"
-                        class="btn btn-aquila-gold"
-                    >
+                    <a href="{{ route('home') }}" class="btn btn-aquila-gold">
                         Return home
                     </a>
 
@@ -747,9 +694,8 @@
     </footer>
 
     {{-- Bootstrap JavaScript --}}
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
