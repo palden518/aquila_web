@@ -34,10 +34,10 @@
 
             <div class="collapse navbar-collapse" id="aquilaNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
                     <li class="nav-item"><a class="nav-link" href="#specials">Specials &amp; packages</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#events">Events &amp; catering</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 </ul>
@@ -56,7 +56,7 @@
                     <h1 class="hero-heading">Fine dining and catering for <em>business and leisure</em></h1>
                     <p class="hero-copy">The Aquila is Brisbane's trusted destination for Italian and Australian cuisine — serving regulars, office professionals, and business meetings, seven days a week.</p>
                     <div class="hero-actions">
-                        <a href="#menu" class="btn btn-aquila-gold">View our menu</a>
+                        <a href="{{ route('menu') }}" class="btn btn-aquila-gold">View our menu</a>
                         <a href="#reserve" class="btn btn-aquila-outline">Make a reservation</a>
                     </div>
                 </div>
@@ -253,7 +253,7 @@
                 <div class="col-lg-2 col-md-6 col-6">
                     <div class="footer-col-title">Explore</div>
                     <ul>
-                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="{{ route('menu') }}">Menu</a></li>
                         <li><a href="#specials">Specials and packages</a></li>
                         <li><a href="#events">Events and catering</a></li>
                         <li><a href="#about">About</a></li>

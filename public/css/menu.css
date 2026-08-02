@@ -1,0 +1,202 @@
+/* =========================================================
+   AQUILA MENU PAGE
+   ========================================================= */
+
+.aquila-menu-page {
+    background: #f7f4f3;
+    color: #f8f3e8;
+    font-family: "Cagliostro", Arial, sans-serif;
+}
+
+.aquila-menu-page h1,
+.aquila-menu-page h2,
+.aquila-menu-page h3,
+.aquila-menu-page h4 {
+    font-family: "Playfair Display", Georgia, serif;
+}
+
+.menu-hero {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at top center, #f2d0a4, transparent 10%), #27255f;
+}
+
+.menu-hero h1 {
+    color: #f8cb63;
+}
+
+.menu-hero-description {
+    max-width: 680px;
+    margin-right: auto;
+    margin-left: auto;
+    color: #d6d0c5;
+}
+
+.menu-eyebrow {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #e8ad3f;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.menu-hero-image {
+    width: 100%;
+    height: 230px;
+    border: 1px solid rgba(232, 173, 63, 0.65);
+    border-radius: 18px;
+    object-fit: cover;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.menu-hero-image:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 35px rgba(232, 173, 63, 0.18);
+}
+
+.menu-category-bar {
+    z-index: 100;
+    top: 74px;
+    border-top: 1px solid rgba(232, 173, 63, 0.25);
+    border-bottom: 1px solid rgba(232, 173, 63, 0.25);
+    background: #27255f;
+    backdrop-filter: blur(8px);
+}
+
+.menu-category-button {
+    border: 1px solid #e8ad3f;
+    border-radius: 999px;
+    background: transparent;
+    color: #f8f3e8;
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.menu-category-button:hover,
+.menu-category-button:focus {
+    border-color: #e8ad3f;
+    background: #e8ad3f;
+    color: #15100a;
+}
+
+.menu-section {
+    border-bottom: 1px solid rgba(232, 173, 63, 0.3);
+    scroll-margin-top: 150px;
+}
+
+.menu-section:nth-of-type(even) {
+    background: #27255f;
+}
+
+.menu-section-title {
+    margin: 0;
+    color: #f4c55c;
+    font-size: clamp(2.2rem, 5vw, 3.7rem);
+}
+
+.menu-section-note {
+    color: #aaa295;
+    font-size: 0.9rem;
+}
+
+.menu-item-card {
+    border-radius: 14px;
+    background: #f6f3ec;
+    box-shadow: none;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.menu-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(232, 173, 63, 0.13);
+}
+
+.menu-item-title {
+    color: #8a5a10;
+    font-size: 1.15rem;
+}
+
+.menu-item-price {
+    flex-shrink: 0;
+    color: #b87911;
+    font-weight: 800;
+}
+
+.menu-item-description {
+    color: #69635a;
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.featured-menu-card {
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(120deg, #d99524, #f4cb72, #f8e0aa);
+    color: #21180b;
+}
+
+.featured-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.featured-menu-title {
+    color: #24190a;
+    font-size: 2rem;
+}
+
+.featured-menu-image {
+    display: block;
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+.aquila-menu-page .aquila-footer {
+    border-top: 1px solid rgba(232, 173, 63, 0.4);
+}
+
+.aquila-menu-page .aquila-footer h4 {
+    color: #e8ad3f;
+}
+
+.aquila-menu-page .aquila-footer p {
+    color: #aaa295;
+}
+
+@media (max-width: 991.98px) {
+    .menu-category-bar {
+        position: static !important;
+    }
+
+    .featured-menu-image {
+        height: 280px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .menu-hero-image {
+        height: 210px;
+    }
+
+    .menu-section-title {
+        margin-bottom: 8px;
+    }
+
+    .menu-item-card .card-body {
+        padding: 20px !important;
+    }
+
+    .featured-menu-image {
+        height: 230px;
+    }
+}
