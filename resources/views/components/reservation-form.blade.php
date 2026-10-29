@@ -1,6 +1,7 @@
 @php
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $reservationErrors = $errors->getBag('reservation');
+    $maxPartySize = (int) \App\Models\Setting::get('reservation_max_guests', '40');
 @endphp
 
 <div class="{{ $theme === 'dark' ? 'inquiry-panel p-4' : '' }}">
@@ -49,7 +50,7 @@
             </div>
             <div class="col-12">
                 <label class="{{ $labelClass }}">Party size</label>
-                <input type="number" name="party_size" value="{{ old('party_size') }}" class="form-control" placeholder="Number of guests" min="1" required>
+                <input type="number" name="party_size" value="{{ old('party_size') }}" class="form-control" placeholder="Number of guests" min="1" max="{{ $maxPartySize }}" required>
             </div>
             <div class="col-12">
                 <label class="{{ $labelClass }}">Special requests (optional)</label>
@@ -61,7 +62,7 @@
 </div>
 
 <script>
-    // Stop the customer clicking "Request a table" twice while the booking is being sent.
+    
     document.querySelectorAll('[data-reservation-form]').forEach(function (form) {
         var button = form.querySelector('button[type="submit"]');
         var originalText = button.innerHTML;
@@ -71,7 +72,7 @@
             button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending your request...';
         });
 
-        // If the customer comes back with the browser's Back button, make the button usable again.
+        
         window.addEventListener('pageshow', function (event) {
             if (event.persisted) {
                 button.disabled = false;

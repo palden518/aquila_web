@@ -28,6 +28,10 @@ class SettingController extends Controller
             'featured_dish_description' => 'Featured dish description',
             'featured_dish_image' => 'Featured dish image URL',
         ],
+        'Table reservations' => [
+            'reservation_max_guests' => 'Maximum guests at one time (the restaurant\'s seating capacity)',
+            'reservation_table_minutes' => 'Table time in minutes (how long each booking holds a table)',
+        ],
     ];
 
     public function edit()
@@ -58,8 +62,13 @@ class SettingController extends Controller
         }
         $rules['site_email'] = ['nullable', 'email', 'max:255'];
         $rules['admin_notification_email'] = ['nullable', 'email', 'max:255'];
+        $rules['reservation_max_guests'] = ['required', 'integer', 'min:1', 'max:1000'];
+        $rules['reservation_table_minutes'] = ['required', 'integer', 'min:15', 'max:480'];
 
-        $data = $request->validate($rules);
+        $data = $request->validate($rules, [], [
+            'reservation_max_guests' => 'maximum guests at one time',
+            'reservation_table_minutes' => 'table time in minutes',
+        ]);
 
         Setting::setMany($data);
 
