@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('reservations.store') }}">
+    <form method="POST" action="{{ route('reservations.store') }}" data-reservation-form>
         @csrf
         <div class="row g-3">
             <div class="col-md-6">
@@ -52,10 +52,31 @@
                 <input type="number" name="party_size" value="{{ old('party_size') }}" class="form-control" placeholder="Number of guests" min="1" required>
             </div>
             <div class="col-12">
-                <label class="{{ $labelClass }}">Notes (optional)</label>
+                <label class="{{ $labelClass }}">Special requests (optional)</label>
                 <textarea class="form-control" name="notes" rows="3" placeholder="Dietary requirements, special occasion, seating preference...">{{ old('notes') }}</textarea>
             </div>
         </div>
         <button type="submit" class="btn btn-aquila-gold w-100 mt-4">Request a table</button>
     </form>
 </div>
+
+<script>
+    // Stop the customer clicking "Request a table" twice while the booking is being sent.
+    document.querySelectorAll('[data-reservation-form]').forEach(function (form) {
+        var button = form.querySelector('button[type="submit"]');
+        var originalText = button.innerHTML;
+
+        form.addEventListener('submit', function () {
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending your request...';
+        });
+
+        // If the customer comes back with the browser's Back button, make the button usable again.
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        });
+    });
+</script>

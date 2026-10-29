@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ReservationReceived;
+use App\Mail\ReservationRequestReceived;
 use App\Models\NotificationLog;
 use App\Models\Reservation;
 use App\Models\Setting;
@@ -29,7 +30,7 @@ class ReservationController extends Controller
         $reservation = Reservation::create($validated);
 
         $this->notifyAdmin($reservation);
-
+        $this->notifyCustomer($reservation);
         return back()
             ->with('reservation_success', "Thanks, {$reservation->name} — your table request has been received. We'll confirm by email or phone shortly.")
             ->withFragment('reserve');
@@ -53,6 +54,31 @@ class ReservationController extends Controller
             'channel' => 'email',
             'recipient' => $adminEmail,
             'message' => "New reservation from {$reservation->name} for {$reservation->reservation_date->format('d M Y')}, party of {$reservation->party_size}.",
+            'status' => $status,
+            'sent_at' => $status === 'sent' ? now() : null,
+        ]);
+    }
+
+    /**
+     * Email the customer to confirm we have received their table request.
+     */
+    protected function notifyCustomer(Reservation $reservation): void
+    {
+        $status = 'sent';
+
+        try {
+            Mail::to($reservation->email)->send(new ReservationRequestReceived($reservation));
+        } catch (\Throwable $e) {
+            $status = 'failed';
+            Log::error('Failed to send reservation confirmation to customer: ' . $e->getMessage());
+        }
+
+        NotificationLog::create([
+            'notifiable_type' => Reservation::class,
+            'notifiable_id' => $reservation->id,
+            'channel' => 'email',
+            'recipient' => $reservation->email,
+            'message' => "Booking request received email to {$reservation->name} for {$reservation->reservation_date->format('d M Y')}, party of {$reservation->party_size}.",
             'status' => $status,
             'sent_at' => $status === 'sent' ? now() : null,
         ]);
