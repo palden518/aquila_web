@@ -193,12 +193,45 @@
                             @enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Subject (optional)</label>
-                                <input type="text" name="subject" value="{{ old('subject') }}" class="form-control" placeholder="What's this about?">
+                                <label for="contact-subject" class="form-label">Subject (optional)</label>
+                                <input
+                                type="text"
+                                id="contact-subject"
+                                name="subject"
+                                value="{{ old('subject') }}"
+                                class="form-control @error('subject') is-invalid @enderror"
+                                placeholder="Subject"
+                                maxlength="255"
+                                @error('subject')
+                                    aria-invalid="true"
+                                    aria-describedby="contact-subject-error"
+                                @enderror
+                                >
+                                @error('subject')
+                                    <div id="contact-subject-error" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Message</label>
-                                <textarea name="message" rows="5" class="form-control" placeholder="How can we help?" required>{{ old('message') }}</textarea>
+                                <label for="contact-message" class="form-label">Message</label>
+                                <textarea
+                                id="contact-message"
+                                name="message"
+                                class="form-control @error('message') is-invalid @enderror"
+                                rows="5"
+                                maxlength="5000"
+                                required
+                                @error('message')
+                                    aria-invalid="true"
+                                    aria-describedby="contact-message-error"
+                                @enderror
+                            >{{ old('message') }}</textarea>
+                                @error('message')
+                                    <div id="contact-message-error" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="mt-4">
