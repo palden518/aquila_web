@@ -128,12 +128,48 @@
                         @csrf
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label">Name</label>
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Your name" required>
+                                <label for="contact-name" class="form-label">Name</label>
+                                <input
+                                type="text"
+                                id="contact-name"
+                                name="name"
+                                value="{{ old('name') }}"
+                                class="form-control @error('name') is-invalid @enderror"
+                                placeholder="Your name"
+                                maxlength="255"
+                                required
+                                @error('name')
+                                    aria-invalid="true"
+                                    aria-describedby="contact-name-error"
+                                @enderror
+                                >
+                                @error('name')
+                                    <div id="contact-name-error" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="you@example.com" required>
+                                <label for="contact-email" class="form-label">Email</label>
+                                <input
+                                type="email"
+                                id="contact-email"
+                                name="email"
+                                value="{{ old('email') }}"
+                                class="form-control @error('email') is-invalid @enderror"
+                                placeholder="you@example.com"
+                                maxlength="255"
+                                required
+                                @error('email')
+                                    aria-invalid="true"
+                                    aria-describedby="contact-email-error"
+                                @enderror
+                                >
+                                @error('email')
+                                    <div id="contact-email-error" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="contact-phone" class="form-label">Phone (optional)</label>
