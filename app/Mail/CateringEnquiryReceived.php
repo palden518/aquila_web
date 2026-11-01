@@ -18,6 +18,6 @@ class CateringEnquiryReceived extends Mailable
     public function build()
     {
         return $this->subject('New catering enquiry — ' . $this->enquiry->name)
-            ->view('emails.catering-enquiry');
+            ->markdown('emails.catering-enquiry');
     }
 }
