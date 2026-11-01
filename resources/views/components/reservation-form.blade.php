@@ -2,6 +2,8 @@
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $reservationErrors = $errors->getBag('reservation');
     $maxPartySize = (int) \App\Models\Setting::get('reservation_max_guests', '40');
+    $openingTime = \App\Support\OpeningHours::openingTime();
+    $lastBookingTime = \App\Support\OpeningHours::lastBookingTime();
 @endphp
 
 <div class="{{ $theme === 'dark' ? 'inquiry-panel p-4' : '' }}">
@@ -10,6 +12,8 @@
     @if ($subheading)
         <p class="{{ $theme === 'dark' ? 'text-white-50' : 'text-muted' }} mb-3">{{ $subheading }}</p>
     @endif
+
+    <p class="{{ $theme === 'dark' ? 'text-white-50' : 'text-muted' }} small mb-3">{{ \App\Support\OpeningHours::summary() }}</p>
 
     @if (session('reservation_success'))
         <div class="alert alert-success">{{ session('reservation_success') }}</div>
@@ -42,11 +46,11 @@
             </div>
             <div class="col-md-3 col-6">
                 <label class="{{ $labelClass }}">Date</label>
-                <input type="date" name="reservation_date" value="{{ old('reservation_date') }}" class="form-control" required>
+                <input type="date" name="reservation_date" value="{{ old('reservation_date') }}" class="form-control" min="{{ now()->toDateString() }}" required>
             </div>
             <div class="col-md-3 col-6">
                 <label class="{{ $labelClass }}">Time</label>
-                <input type="time" name="reservation_time" value="{{ old('reservation_time') }}" class="form-control" required>
+                <input type="time" name="reservation_time" value="{{ old('reservation_time') }}" class="form-control" min="{{ $openingTime }}" max="{{ $lastBookingTime }}" required>
             </div>
             <div class="col-12">
                 <label class="{{ $labelClass }}">Party size</label>
@@ -62,7 +66,7 @@
 </div>
 
 <script>
-    
+    // Stop the customer clicking "Request a table" twice while the booking is being sent.
     document.querySelectorAll('[data-reservation-form]').forEach(function (form) {
         var button = form.querySelector('button[type="submit"]');
         var originalText = button.innerHTML;
@@ -72,7 +76,7 @@
             button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending your request...';
         });
 
-        
+        // If the customer comes back with the browser's Back button, make the button usable again.
         window.addEventListener('pageshow', function (event) {
             if (event.persisted) {
                 button.disabled = false;

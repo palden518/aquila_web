@@ -19,6 +19,11 @@ class SettingsSeeder extends Seeder
             'featured_dish_title' => 'Home Dinner',
             'featured_dish_description' => "Ask our team about today's featured meal, prepared using fresh seasonal ingredients.",
             'featured_dish_image' => 'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80',
+            'reservation_max_guests' => '40',
+            'reservation_table_minutes' => '120',
+            'reservation_opening_time' => '07:00',
+            'reservation_closing_time' => '15:00',
+            'reservation_closed_days' => 'saturday,sunday',
         ]);
     }
 }
