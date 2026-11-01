@@ -136,8 +136,25 @@
                                 <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="you@example.com" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Phone (optional)</label>
-                                <input type="text" name="phone" value="{{ old('phone') }}" class="form-control" placeholder="Your phone number">
+                                <label for="contact-phone" class="form-label">Phone (optional)</label>
+                                <input
+                                type="tel"
+                                id="contact-phone"
+                                name="phone"
+                                value="{{ old('phone') }}"
+                                class="form-control @error('phone') is-invalid @enderror"
+                                placeholder="0412 345 678"
+                                maxlength="50"
+                                @error('phone')
+                                aria-invalid="true"
+                                aria-describedby="contact-phone-error"
+                                @enderror
+                                >
+                            @error('phone')
+                                <div id="contact-phone-error" class="invalid-feedback">
+                                     {{ $message }}
+                                </div>
+                            @enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Subject (optional)</label>
