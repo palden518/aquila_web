@@ -24,6 +24,7 @@ class EventsController extends Controller
     public function storeEnquiry(Request $request): RedirectResponse
     {
         $validated = $request->validateWithBag('catering', [
+            'website' => ['prohibited'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
@@ -36,6 +37,7 @@ class EventsController extends Controller
         if ($request->user()) {
             $validated['user_id'] = $request->user()->id;
         }
+
         $validated['status'] = 'new';
 
         $enquiry = CateringEnquiry::create($validated);

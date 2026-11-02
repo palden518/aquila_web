@@ -1,4 +1,3 @@
-
 @php
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $cateringErrors = $errors->getBag('catering');
@@ -31,6 +30,23 @@
 
     <form method="POST" action="{{ route('events.enquiry.store') }}">
         @csrf
+
+        {{-- AQL-68: Honeypot spam protection --}}
+        <div
+            class="position-absolute"
+            style="left: -9999px;"
+            aria-hidden="true"
+        >
+            <label for="catering-website">Website</label>
+            <input
+                type="text"
+                id="catering-website"
+                name="website"
+                value=""
+                tabindex="-1"
+                autocomplete="off"
+            >
+        </div>
 
         <div class="mb-3">
             <label for="catering-name" class="{{ $labelClass }}">Name</label>
