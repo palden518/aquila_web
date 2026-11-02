@@ -126,6 +126,21 @@
 
                     <form method="POST" action="{{ route('contact.store') }}">
                         @csrf
+                        <div
+                            class="position-absolute"
+                            style="left: -9999px;"
+                            aria-hidden="true"
+                        >
+                            <label for="contact-website">Website</label>
+                            <input
+                                type="text"
+                                id="contact-website"
+                                name="website"
+                                value=""
+                                tabindex="-1"
+                                autocomplete="off"
+                            >
+                        </div>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="contact-name" class="form-label">Name</label>
@@ -181,6 +196,8 @@
                                 class="form-control @error('phone') is-invalid @enderror"
                                 placeholder="0412 345 678"
                                 maxlength="50"
+                                pattern="(?:(?:04|\+61[ -]?4)(?:[ -]?[0-9]){8}|(?:0[2378]|\+61[ -]?[2378])(?:[ -]?[0-9]){8})"
+                                title="Enter a valid Australian phone number, such as 0412 345 678 or +61 412 345 678."
                                 @error('phone')
                                 aria-invalid="true"
                                 aria-describedby="contact-phone-error"
