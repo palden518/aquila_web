@@ -1,3 +1,4 @@
+
 @php
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $reservationErrors = $errors->getBag('reservation');
@@ -26,6 +27,24 @@
 
     <form method="POST" action="{{ route('reservations.store') }}">
         @csrf
+
+        {{-- AQL-68: Honeypot spam protection --}}
+        <div
+            class="position-absolute"
+            style="left: -9999px;"
+            aria-hidden="true"
+        >
+            <label for="reservation-website">Website</label>
+            <input
+                type="text"
+                id="reservation-website"
+                name="website"
+                value=""
+                tabindex="-1"
+                autocomplete="off"
+            >
+        </div>
+
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="reservation-name" class="{{ $labelClass }}">Name</label>
@@ -50,6 +69,7 @@
                     </div>
                 @enderror
             </div>
+
             <div class="col-md-6">
                 <label for="reservation-email" class="{{ $labelClass }}">Email</label>
 
@@ -73,6 +93,7 @@
                     </div>
                 @enderror
             </div>
+
             <div class="col-md-6">
                 <label for="reservation-phone" class="{{ $labelClass }}">Phone</label>
 
@@ -96,6 +117,7 @@
                     </div>
                 @enderror
             </div>
+
             <div class="col-md-3 col-6">
                 <label for="reservation-date" class="{{ $labelClass }}">Date</label>
 
@@ -118,6 +140,7 @@
                     </div>
                 @enderror
             </div>
+
             <div class="col-md-3 col-6">
                 <label for="reservation-time" class="{{ $labelClass }}">Time</label>
 
@@ -140,6 +163,7 @@
                     </div>
                 @enderror
             </div>
+
             <div class="col-12">
                 <label for="reservation-party-size" class="{{ $labelClass }}">Party size</label>
 
@@ -164,6 +188,7 @@
                     </div>
                 @enderror
             </div>
+
             <div class="col-12">
                 <label for="reservation-notes" class="{{ $labelClass }}">Notes (optional)</label>
 
@@ -186,6 +211,7 @@
                 @enderror
             </div>
         </div>
+
         <button type="submit" class="btn btn-aquila-gold w-100 mt-4">Request a table</button>
     </form>
 </div>

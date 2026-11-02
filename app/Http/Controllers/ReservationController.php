@@ -16,6 +16,7 @@ class ReservationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validateWithBag('reservation', [
+            'website' => ['prohibited'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
@@ -24,6 +25,7 @@ class ReservationController extends Controller
             'party_size' => ['required', 'integer', 'min:1', 'max:50'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
+
         $validated['status'] = 'new';
 
         $reservation = Reservation::create($validated);
