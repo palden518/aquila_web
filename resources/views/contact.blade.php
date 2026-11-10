@@ -187,7 +187,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="contact-phone" class="form-label">Phone (optional)</label>
+                                <label for="contact-phone" class="form-label">Phone</label>
                                 <input
                                 type="tel"
                                 id="contact-phone"
@@ -196,7 +196,7 @@
                                 class="form-control @error('phone') is-invalid @enderror"
                                 placeholder="0412 345 678"
                                 maxlength="50"
-                                pattern="(?:(?:04|\+61[ -]?4)(?:[ -]?[0-9]){8}|(?:0[2378]|\+61[ -]?[2378])(?:[ -]?[0-9]){8})"
+                                pattern="(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8}"
                                 title="Enter a valid Australian phone number, such as 0412 345 678 or +61 412 345 678."
                                 @error('phone')
                                 aria-invalid="true"
