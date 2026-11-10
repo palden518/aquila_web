@@ -183,6 +183,7 @@ body {
 .badge-status-new { background: #3b82f6; }
 .badge-status-contacted { background: #f59e0b; }
 .badge-status-confirmed { background: #22c55e; }
+.badge-status-seated { background: #8b5cf6; }
 .badge-status-declined { background: #ef4444; }
 .badge-status-completed { background: #6b7280; }
 

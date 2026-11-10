@@ -72,7 +72,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
         Route::get('contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
         Route::patch('contact-messages/{contactMessage}/status', [ContactMessageController::class, 'updateStatus'])->name('contact-messages.status');
+    });
 
+    Route::middleware('permission:manage reservations')->group(function () {
         Route::get('reservations', [AdminReservationController::class, 'index'])->name('reservations.index');
         Route::get('reservations/{reservation}', [AdminReservationController::class, 'show'])->name('reservations.show');
         Route::patch('reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('reservations.status');
