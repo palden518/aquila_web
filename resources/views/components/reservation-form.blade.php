@@ -1,4 +1,3 @@
-
 @php
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $reservationErrors = $errors->getBag('reservation');
@@ -8,15 +7,19 @@
     <h3 class="h4 mb-3">{{ $heading }}</h3>
 
     @if ($subheading)
-        <p class="{{ $theme === 'dark' ? 'text-white-50' : 'text-muted' }} mb-3">{{ $subheading }}</p>
+        <p class="{{ $theme === 'dark' ? 'text-white-50' : 'text-muted' }} mb-3">
+            {{ $subheading }}
+        </p>
     @endif
 
     @if (session('reservation_success'))
-        <div class="alert alert-success">{{ session('reservation_success') }}</div>
+        <div class="alert alert-success" role="status">
+            {{ session('reservation_success') }}
+        </div>
     @endif
 
     @if ($reservationErrors->any())
-        <div class="alert alert-danger">
+        <div class="alert alert-danger" role="alert">
             <ul class="mb-0">
                 @foreach ($reservationErrors->all() as $error)
                     <li>{{ $error }}</li>
@@ -46,6 +49,8 @@
         </div>
 
         <div class="row g-3">
+
+            {{-- Name --}}
             <div class="col-md-6">
                 <label for="reservation-name" class="{{ $labelClass }}">Name</label>
 
@@ -56,6 +61,7 @@
                     value="{{ old('name') }}"
                     class="form-control @error('name', 'reservation') is-invalid @enderror"
                     placeholder="Your name"
+                    maxlength="255"
                     required
                     @error('name', 'reservation')
                         aria-invalid="true"
@@ -70,6 +76,7 @@
                 @enderror
             </div>
 
+            {{-- Email --}}
             <div class="col-md-6">
                 <label for="reservation-email" class="{{ $labelClass }}">Email</label>
 
@@ -80,6 +87,7 @@
                     value="{{ old('email') }}"
                     class="form-control @error('email', 'reservation') is-invalid @enderror"
                     placeholder="you@example.com"
+                    maxlength="255"
                     required
                     @error('email', 'reservation')
                         aria-invalid="true"
@@ -94,6 +102,7 @@
                 @enderror
             </div>
 
+            {{-- Australian Phone Validation --}}
             <div class="col-md-6">
                 <label for="reservation-phone" class="{{ $labelClass }}">Phone</label>
 
@@ -103,7 +112,10 @@
                     name="phone"
                     value="{{ old('phone') }}"
                     class="form-control @error('phone', 'reservation') is-invalid @enderror"
-                    placeholder="Your phone number"
+                    placeholder="0412 345 678"
+                    maxlength="50"
+                    pattern="(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8}"
+                    title="Enter a valid Australian phone number, such as 0412 345 678 or +61 412 345 678."
                     required
                     @error('phone', 'reservation')
                         aria-invalid="true"
@@ -118,6 +130,7 @@
                 @enderror
             </div>
 
+            {{-- Reservation Date --}}
             <div class="col-md-3 col-6">
                 <label for="reservation-date" class="{{ $labelClass }}">Date</label>
 
@@ -126,6 +139,7 @@
                     id="reservation-date"
                     name="reservation_date"
                     value="{{ old('reservation_date') }}"
+                    min="{{ now()->toDateString() }}"
                     class="form-control @error('reservation_date', 'reservation') is-invalid @enderror"
                     required
                     @error('reservation_date', 'reservation')
@@ -141,6 +155,7 @@
                 @enderror
             </div>
 
+            {{-- Reservation Time --}}
             <div class="col-md-3 col-6">
                 <label for="reservation-time" class="{{ $labelClass }}">Time</label>
 
@@ -164,6 +179,7 @@
                 @enderror
             </div>
 
+            {{-- Party Size --}}
             <div class="col-12">
                 <label for="reservation-party-size" class="{{ $labelClass }}">Party size</label>
 
@@ -175,6 +191,8 @@
                     class="form-control @error('party_size', 'reservation') is-invalid @enderror"
                     placeholder="Number of guests"
                     min="1"
+                    max="50"
+                    step="1"
                     required
                     @error('party_size', 'reservation')
                         aria-invalid="true"
@@ -189,14 +207,18 @@
                 @enderror
             </div>
 
+            {{-- Optional Notes --}}
             <div class="col-12">
-                <label for="reservation-notes" class="{{ $labelClass }}">Notes (optional)</label>
+                <label for="reservation-notes" class="{{ $labelClass }}">
+                    Notes (optional)
+                </label>
 
                 <textarea
                     id="reservation-notes"
                     name="notes"
                     class="form-control @error('notes', 'reservation') is-invalid @enderror"
                     rows="3"
+                    maxlength="2000"
                     placeholder="Dietary requirements, special occasion, seating preference..."
                     @error('notes', 'reservation')
                         aria-invalid="true"
@@ -210,8 +232,11 @@
                     </div>
                 @enderror
             </div>
+
         </div>
 
-        <button type="submit" class="btn btn-aquila-gold w-100 mt-4">Request a table</button>
+        <button type="submit" class="btn btn-aquila-gold w-100 mt-4">
+            Request a table
+        </button>
     </form>
 </div>
