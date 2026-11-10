@@ -28,7 +28,9 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('events.enquiry.store') }}">
+    <form method="POST"
+          action="{{ route('events.enquiry.store') }}"
+          data-catering-form>
         @csrf
 
         {{-- AQL-68: Honeypot spam protection --}}
@@ -48,8 +50,11 @@
             >
         </div>
 
+        {{-- Name --}}
         <div class="mb-3">
-            <label for="catering-name" class="{{ $labelClass }}">Name</label>
+            <label for="catering-name" class="{{ $labelClass }}">
+                Name
+            </label>
 
             <input
                 type="text"
@@ -58,6 +63,7 @@
                 value="{{ old('name') }}"
                 class="form-control @error('name', 'catering') is-invalid @enderror"
                 placeholder="Your name"
+                maxlength="255"
                 required
                 @error('name', 'catering')
                     aria-invalid="true"
@@ -72,8 +78,11 @@
             @enderror
         </div>
 
+        {{-- Email --}}
         <div class="mb-3">
-            <label for="catering-email" class="{{ $labelClass }}">Email</label>
+            <label for="catering-email" class="{{ $labelClass }}">
+                Email
+            </label>
 
             <input
                 type="email"
@@ -82,6 +91,7 @@
                 value="{{ old('email') }}"
                 class="form-control @error('email', 'catering') is-invalid @enderror"
                 placeholder="you@example.com"
+                maxlength="255"
                 required
                 @error('email', 'catering')
                     aria-invalid="true"
@@ -96,8 +106,11 @@
             @enderror
         </div>
 
+        {{-- Australian phone number --}}
         <div class="mb-3">
-            <label for="catering-phone" class="{{ $labelClass }}">Phone</label>
+            <label for="catering-phone" class="{{ $labelClass }}">
+                Phone
+            </label>
 
             <input
                 type="tel"
@@ -106,6 +119,9 @@
                 value="{{ old('phone') }}"
                 class="form-control @error('phone', 'catering') is-invalid @enderror"
                 placeholder="Your phone number"
+                maxlength="50"
+                pattern="(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8}"
+                title="Enter a valid Australian phone number, such as 0412 345 678 or +61 412 345 678."
                 required
                 @error('phone', 'catering')
                     aria-invalid="true"
@@ -120,14 +136,18 @@
             @enderror
         </div>
 
+        {{-- Event date --}}
         <div class="mb-3">
-            <label for="catering-date" class="{{ $labelClass }}">Date</label>
+            <label for="catering-date" class="{{ $labelClass }}">
+                Date
+            </label>
 
             <input
                 type="date"
                 id="catering-date"
                 name="event_date"
                 value="{{ old('event_date') }}"
+                min="{{ now('Australia/Brisbane')->toDateString() }}"
                 class="form-control @error('event_date', 'catering') is-invalid @enderror"
                 required
                 @error('event_date', 'catering')
@@ -143,8 +163,11 @@
             @enderror
         </div>
 
+        {{-- Guest count --}}
         <div class="mb-3">
-            <label for="catering-guest-count" class="{{ $labelClass }}">Guest count</label>
+            <label for="catering-guest-count" class="{{ $labelClass }}">
+                Guest count
+            </label>
 
             <input
                 type="number"
@@ -154,6 +177,8 @@
                 class="form-control @error('guest_count', 'catering') is-invalid @enderror"
                 placeholder="Approximate guests"
                 min="1"
+                max="1000"
+                step="1"
                 required
                 @error('guest_count', 'catering')
                     aria-invalid="true"
@@ -168,8 +193,11 @@
             @enderror
         </div>
 
+        {{-- Event type --}}
         <div class="mb-3">
-            <label for="catering-event-type" class="{{ $labelClass }}">Event type</label>
+            <label for="catering-event-type" class="{{ $labelClass }}">
+                Event type
+            </label>
 
             @php
                 $selectedEventType = old('event_type', $eventType);
@@ -179,6 +207,7 @@
                 id="catering-event-type"
                 name="event_type"
                 class="form-select @error('event_type', 'catering') is-invalid @enderror"
+                required
                 @error('event_type', 'catering')
                     aria-invalid="true"
                     aria-describedby="catering-event-type-error"
@@ -212,14 +241,18 @@
             @enderror
         </div>
 
+        {{-- Message --}}
         <div class="mb-3">
-            <label for="catering-message" class="{{ $labelClass }}">Message</label>
+            <label for="catering-message" class="{{ $labelClass }}">
+                Message
+            </label>
 
             <textarea
                 id="catering-message"
                 name="message"
                 class="form-control @error('message', 'catering') is-invalid @enderror"
                 rows="3"
+                maxlength="5000"
                 placeholder="Tell us about your event"
                 @error('message', 'catering')
                     aria-invalid="true"

@@ -28,7 +28,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('reservations.store') }}">
+    <form method="POST" action="{{ route('reservations.store') }}" data-reservation-form>
         @csrf
 
         {{-- AQL-68: Honeypot spam protection --}}

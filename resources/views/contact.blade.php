@@ -15,6 +15,8 @@
 
     {{-- Page styles (same stylesheet as the homepage — no new CSS added) --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="{{ asset('js/form-validation.js') }}" defer></script>
+
 </head>
 <body>
 
@@ -124,7 +126,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('contact.store') }}">
+                    <form method="POST" action="{{ route('contact.store') }}" data-contact-form>
                         @csrf
                         <div
                             class="position-absolute"

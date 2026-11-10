@@ -27,10 +27,10 @@ class EventsController extends Controller
             'website' => ['prohibited'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'phone' => ['required', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:50', 'regex:/\A(?:(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8})\z/',],
             'event_date' => ['required', 'date', 'after_or_equal:today'],
             'guest_count' => ['required', 'integer', 'min:1', 'max:1000'],
-            'event_type' => ['nullable', 'in:corporate,wedding,private_party,off_site'],
+            'event_type' => ['required', 'in:corporate,wedding,private_party,off_site'],
             'message' => ['nullable', 'string', 'max:5000'],
         ]);
 
