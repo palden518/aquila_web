@@ -15,8 +15,8 @@
 
     {{-- Page styles --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="{{ asset('js/form-validation.js') }}" defer></script>
 </head>
-<script src="{{ asset('js/form-validation.js') }}" defer></script>
 <body>
 
     {{-- ============================= NAVBAR ============================= --}}

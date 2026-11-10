@@ -16,8 +16,8 @@
     {{-- Project CSS --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/events.css') }}">
+    <script src="{{ asset('js/form-validation.js') }}" defer></script>
 </head>
-<script src="{{ asset('js/form-validation.js') }}" defer></script>
 <body class="event-page">
 
        <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
