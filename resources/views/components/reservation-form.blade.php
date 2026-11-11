@@ -144,7 +144,7 @@
                     id="reservation-date"
                     name="reservation_date"
                     value="{{ $reservationOld ? old('reservation_date') : '' }}"
-                    min="{{ now()->toDateString() }}"
+                    min="{{ now('Australia/Brisbane')->toDateString() }}"
                     class="form-control @error('reservation_date', 'reservation') is-invalid @enderror"
                     required
                     @error('reservation_date', 'reservation')
