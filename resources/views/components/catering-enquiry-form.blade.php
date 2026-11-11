@@ -1,6 +1,9 @@
 @php
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $cateringErrors = $errors->getBag('catering');
+
+    // AQL-62: Only restore input after a Catering validation failure.
+    $cateringOld = $cateringErrors->any();
 @endphp
 
 <div class="{{ $theme === 'dark' ? 'inquiry-panel p-4' : '' }}">
@@ -60,7 +63,7 @@
                 type="text"
                 id="catering-name"
                 name="name"
-                value="{{ old('name') }}"
+                value="{{ $cateringOld ? old('name') : '' }}"
                 class="form-control @error('name', 'catering') is-invalid @enderror"
                 placeholder="Your name"
                 maxlength="255"
@@ -88,7 +91,7 @@
                 type="email"
                 id="catering-email"
                 name="email"
-                value="{{ old('email') }}"
+                value="{{ $cateringOld ? old('email') : '' }}"
                 class="form-control @error('email', 'catering') is-invalid @enderror"
                 placeholder="you@example.com"
                 maxlength="255"
@@ -116,7 +119,7 @@
                 type="tel"
                 id="catering-phone"
                 name="phone"
-                value="{{ old('phone') }}"
+                value="{{ $cateringOld ? old('phone') : '' }}"
                 class="form-control @error('phone', 'catering') is-invalid @enderror"
                 placeholder="Your phone number"
                 maxlength="50"
@@ -146,7 +149,7 @@
                 type="date"
                 id="catering-date"
                 name="event_date"
-                value="{{ old('event_date') }}"
+                value="{{ $cateringOld ? old('event_date') : '' }}"
                 min="{{ now('Australia/Brisbane')->toDateString() }}"
                 class="form-control @error('event_date', 'catering') is-invalid @enderror"
                 required
@@ -173,7 +176,7 @@
                 type="number"
                 id="catering-guest-count"
                 name="guest_count"
-                value="{{ old('guest_count') }}"
+                value="{{ $cateringOld ? old('guest_count') : '' }}"
                 class="form-control @error('guest_count', 'catering') is-invalid @enderror"
                 placeholder="Approximate guests"
                 min="1"
@@ -200,7 +203,10 @@
             </label>
 
             @php
-                $selectedEventType = old('event_type', $eventType);
+                // AQL-62: Preserve the selection only for Catering errors.
+                $selectedEventType = $cateringOld
+                    ? old('event_type', $eventType)
+                    : $eventType;
             @endphp
 
             <select
@@ -258,7 +264,7 @@
                     aria-invalid="true"
                     aria-describedby="catering-message-error"
                 @enderror
-            >{{ old('message') }}</textarea>
+            >{{ $cateringOld ? old('message') : '' }}</textarea>
 
             @error('message', 'catering')
                 <div id="catering-message-error" class="invalid-feedback">

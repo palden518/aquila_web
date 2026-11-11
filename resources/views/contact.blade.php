@@ -4,22 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us — The Aquila, Brisbane City</title>
-
     {{-- Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Cagliostro&display=swap" rel="stylesheet">
-
     {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     {{-- Page styles (same stylesheet as the homepage — no new CSS added) --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/form-validation.js') }}" defer></script>
-
 </head>
 <body>
-
     {{-- ============================= NAVBAR ============================= --}}
     <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
         <div class="container">
@@ -27,13 +22,11 @@
                 <img src="{{ asset('images/logo.webp') }}" alt="The Aquila logo">
                 AQUILA
             </a>
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#aquilaNav" aria-controls="aquilaNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon-custom">
                     <span></span><span></span><span></span>
                 </span>
             </button>
-
             <div class="collapse navbar-collapse" id="aquilaNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
@@ -48,7 +41,6 @@
             </div>
         </div>
     </nav>
-
     {{-- ============================= PAGE HEADING ============================= --}}
     <section class="section-padded pb-0">
         <div class="container text-center">
@@ -57,7 +49,6 @@
             <p class="section-lede mx-auto">Questions about dining, bookings, or catering? Send us a message or reach out directly — our team is here seven days a week.</p>
         </div>
     </section>
-
     {{-- ============================= INFO STRIP ============================= --}}
     <div class="info-strip">
         <div class="container">
@@ -77,7 +68,6 @@
             </div>
         </div>
     </div>
-
     {{-- ============================= BOOK A TABLE / CATERING ENQUIRY ============================= --}}
     <section class="section-padded aq-section-indigo" id="reserve">
         <div class="container">
@@ -88,7 +78,6 @@
             <p class="aq-copy-on-dark mb-4">
                 Reservations, catering enquiries, and general contact — we're here seven days a week.
             </p>
-
             <div class="row g-4">
                 <div class="col-lg-6">
                     <x-reservation-form theme="dark" />
@@ -102,30 +91,31 @@
             </div>
         </div>
     </section>
-
     {{-- ============================= CONTACT FORM + DETAILS ============================= --}}
     <section class="section-padded">
         <div class="container">
             <div class="row g-5">
-
                 <div class="col-lg-6">
                     <span class="eyebrow">Send a message</span>
                     <h2 class="section-heading mb-4">We'd love to <span class="text-gold-italic">hear from you</span></h2>
+                    @php
+                        // AQL-62: Contact errors use the default bag.
+                        $contactErrors = $errors->getBag('default');
+                        $contactOld = $contactErrors->any();
+                    @endphp
 
                     @if (session('contact_success'))
                         <div class="alert alert-success">{{ session('contact_success') }}</div>
                     @endif
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
+                    @if ($contactErrors->any())
+                        <div class="alert alert-danger" role="alert">
                             <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
+                                @foreach ($contactErrors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
                         </div>
                     @endif
-
                     <form method="POST" action="{{ route('contact.store') }}" data-contact-form>
                         @csrf
                         <div
@@ -150,7 +140,7 @@
                                 type="text"
                                 id="contact-name"
                                 name="name"
-                                value="{{ old('name') }}"
+                                value="{{ $contactOld ? old('name') : '' }}"
                                 class="form-control @error('name') is-invalid @enderror"
                                 placeholder="Your name"
                                 maxlength="255"
@@ -172,7 +162,7 @@
                                 type="email"
                                 id="contact-email"
                                 name="email"
-                                value="{{ old('email') }}"
+                                value="{{ $contactOld ? old('email') : '' }}"
                                 class="form-control @error('email') is-invalid @enderror"
                                 placeholder="you@example.com"
                                 maxlength="255"
@@ -194,7 +184,7 @@
                                 type="tel"
                                 id="contact-phone"
                                 name="phone"
-                                value="{{ old('phone') }}"
+                                value="{{ $contactOld ? old('phone') : '' }}"
                                 class="form-control @error('phone') is-invalid @enderror"
                                 placeholder="0412 345 678"
                                 maxlength="50"
@@ -217,7 +207,7 @@
                                 type="text"
                                 id="contact-subject"
                                 name="subject"
-                                value="{{ old('subject') }}"
+                                value="{{ $contactOld ? old('subject') : '' }}"
                                 class="form-control @error('subject') is-invalid @enderror"
                                 placeholder="Subject"
                                 maxlength="255"
@@ -245,7 +235,7 @@
                                     aria-invalid="true"
                                     aria-describedby="contact-message-error"
                                 @enderror
-                            >{{ old('message') }}</textarea>
+                            >{{ $contactOld ? old('message') : '' }}</textarea>
                                 @error('message')
                                     <div id="contact-message-error" class="invalid-feedback">
                                         {{ $message }}
@@ -258,11 +248,9 @@
                         </div>
                     </form>
                 </div>
-
                 <div class="col-lg-6">
                     <span class="eyebrow">Visit us</span>
                     <h2 class="section-heading mb-4">Find us on <span class="text-gold-italic">Eagle Street</span></h2>
-
                     <div class="row g-4">
                         <div class="col-md-6">
                             <div class="feature-card">
@@ -313,17 +301,14 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
-
     {{-- ============================= GOOGLE MAP — ABOVE THE FOOTER ============================= --}}
     <section class="section-padded pt-0">
         <div class="container">
             <span class="eyebrow">Our location</span>
             <h2 class="section-heading mb-4">{{ $content['address'] }}</h2>
-
             <div class="ratio ratio-21x9">
                 <iframe
                     src="https://www.google.com/maps?q={{ urlencode($content['address']) }}&output=embed"
@@ -336,7 +321,6 @@
             </div>
         </div>
     </section>
-
     {{-- ============================= FOOTER ============================= --}}
     <footer class="aquila-footer">
         <div class="container">
@@ -353,7 +337,6 @@
                         </a>
                     </div>
                 </div>
-
                 <div class="col-lg-2 col-md-6 col-6">
                     <div class="footer-col-title">Explore</div>
                     <ul>
@@ -364,7 +347,6 @@
                         <li><a href="{{ route('contact') }}">Contact</a></li>
                     </ul>
                 </div>
-
                 <div class="col-lg-3 col-md-6 col-6">
                     <div class="footer-col-title">Visit us</div>
                     <ul>
@@ -374,7 +356,6 @@
                         <li><a href="mailto:{{ $content['email'] }}">{{ $content['email'] }}</a></li>
                     </ul>
                 </div>
-
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-col-title">Legal</div>
                     <ul>
@@ -384,14 +365,12 @@
                     </ul>
                 </div>
             </div>
-
             <div class="footer-bottom d-flex flex-column flex-md-row justify-content-md-between">
                 <span>{{ date('Y') }} The Aquila. All rights reserved.</span>
                 <span class="text-md-end">Brisbane City, Queensland, Australia</span>
             </div>
         </div>
     </footer>
-
     {{-- Bootstrap JS bundle --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

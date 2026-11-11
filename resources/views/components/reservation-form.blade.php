@@ -1,6 +1,9 @@
 @php
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $reservationErrors = $errors->getBag('reservation');
+
+    // AQL-62: Only restore input after a Reservation validation failure.
+    $reservationOld = $reservationErrors->any();
 @endphp
 
 <div class="{{ $theme === 'dark' ? 'inquiry-panel p-4' : '' }}">
@@ -28,7 +31,9 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('reservations.store') }}" data-reservation-form>
+    <form method="POST"
+          action="{{ route('reservations.store') }}"
+          data-reservation-form>
         @csrf
 
         {{-- AQL-68: Honeypot spam protection --}}
@@ -58,7 +63,7 @@
                     type="text"
                     id="reservation-name"
                     name="name"
-                    value="{{ old('name') }}"
+                    value="{{ $reservationOld ? old('name') : '' }}"
                     class="form-control @error('name', 'reservation') is-invalid @enderror"
                     placeholder="Your name"
                     maxlength="255"
@@ -84,7 +89,7 @@
                     type="email"
                     id="reservation-email"
                     name="email"
-                    value="{{ old('email') }}"
+                    value="{{ $reservationOld ? old('email') : '' }}"
                     class="form-control @error('email', 'reservation') is-invalid @enderror"
                     placeholder="you@example.com"
                     maxlength="255"
@@ -110,7 +115,7 @@
                     type="tel"
                     id="reservation-phone"
                     name="phone"
-                    value="{{ old('phone') }}"
+                    value="{{ $reservationOld ? old('phone') : '' }}"
                     class="form-control @error('phone', 'reservation') is-invalid @enderror"
                     placeholder="0412 345 678"
                     maxlength="50"
@@ -138,7 +143,7 @@
                     type="date"
                     id="reservation-date"
                     name="reservation_date"
-                    value="{{ old('reservation_date') }}"
+                    value="{{ $reservationOld ? old('reservation_date') : '' }}"
                     min="{{ now()->toDateString() }}"
                     class="form-control @error('reservation_date', 'reservation') is-invalid @enderror"
                     required
@@ -163,7 +168,7 @@
                     type="time"
                     id="reservation-time"
                     name="reservation_time"
-                    value="{{ old('reservation_time') }}"
+                    value="{{ $reservationOld ? old('reservation_time') : '' }}"
                     class="form-control @error('reservation_time', 'reservation') is-invalid @enderror"
                     required
                     @error('reservation_time', 'reservation')
@@ -187,7 +192,7 @@
                     type="number"
                     id="reservation-party-size"
                     name="party_size"
-                    value="{{ old('party_size') }}"
+                    value="{{ $reservationOld ? old('party_size') : '' }}"
                     class="form-control @error('party_size', 'reservation') is-invalid @enderror"
                     placeholder="Number of guests"
                     min="1"
@@ -224,7 +229,7 @@
                         aria-invalid="true"
                         aria-describedby="reservation-notes-error"
                     @enderror
-                >{{ old('notes') }}</textarea>
+                >{{ $reservationOld ? old('notes') : '' }}</textarea>
 
                 @error('notes', 'reservation')
                     <div id="reservation-notes-error" class="invalid-feedback">
