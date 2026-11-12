@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     forms.forEach(function (form) {
-        // Use inline feedback instead of browser validation popups.
+        // AQL-60: Use inline feedback instead of browser popups.
         form.noValidate = true;
 
         const fields = form.querySelectorAll(
@@ -27,7 +27,35 @@ document.addEventListener("DOMContentLoaded", function () {
                     : field.name + "-client-error";
             }
 
+            // AQL-70: Announce dynamically updated errors.
+            feedback.setAttribute("role", "alert");
+            feedback.setAttribute("aria-live", "assertive");
+
             return feedback;
+        }
+
+        function addDescription(field, feedbackId) {
+            const ids = (field.getAttribute("aria-describedby") || "")
+                .split(/\s+/)
+                .filter(Boolean);
+
+            if (!ids.includes(feedbackId)) {
+                ids.push(feedbackId);
+            }
+
+            field.setAttribute("aria-describedby", ids.join(" "));
+        }
+
+        function removeDescription(field, feedbackId) {
+            const ids = (field.getAttribute("aria-describedby") || "")
+                .split(/\s+/)
+                .filter((id) => id && id !== feedbackId);
+
+            if (ids.length) {
+                field.setAttribute("aria-describedby", ids.join(" "));
+            } else {
+                field.removeAttribute("aria-describedby");
+            }
         }
 
         function validateField(field) {
@@ -48,20 +76,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 feedback.style.display = "block";
+
                 field.setAttribute("aria-invalid", "true");
-                field.setAttribute("aria-describedby", feedback.id);
+                addDescription(field, feedback.id);
 
                 return false;
             }
 
             if (serverError) {
-                // Keep Laravel's error until the user edits the field.
-                return true;
+                // Keep the Laravel error until the field is edited.
+                field.classList.add("is-invalid");
+                field.setAttribute("aria-invalid", "true");
+                addDescription(field, feedback.id);
+
+                return false;
             }
 
             field.classList.remove("is-invalid");
 
-            // Do not mark optional empty fields as valid.
             if (field.value.trim() !== "") {
                 field.classList.add("is-valid");
             } else {
@@ -72,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
             feedback.style.display = "none";
 
             field.removeAttribute("aria-invalid");
-            field.removeAttribute("aria-describedby");
+            removeDescription(field, feedback.id);
 
             return true;
         }
@@ -86,6 +118,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 field.classList.contains("is-invalid")
             ) {
                 feedback.dataset.serverError = "true";
+                feedback.setAttribute("role", "alert");
+                feedback.setAttribute("aria-live", "assertive");
+
+                addDescription(field, feedback.id);
+                field.setAttribute("aria-invalid", "true");
             }
 
             field.addEventListener("blur", function () {
@@ -93,10 +130,11 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             function handleChange() {
-                const feedback = field.nextElementSibling;
+                const feedback = getFeedback(field);
 
-                if (feedback) {
+                if (feedback.dataset.serverError === "true") {
                     delete feedback.dataset.serverError;
+                    feedback.textContent = "";
                 }
 
                 validateField(field);
