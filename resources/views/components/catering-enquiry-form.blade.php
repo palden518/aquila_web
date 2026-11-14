@@ -55,88 +55,23 @@
 
         {{-- Name --}}
         <div class="mb-3">
-            <label for="catering-name" class="{{ $labelClass }}">
-                Name
-            </label>
-
-            <input
-                type="text"
-                id="catering-name"
-                name="name"
-                value="{{ $cateringOld ? old('name') : '' }}"
-                class="form-control @error('name', 'catering') is-invalid @enderror"
-                placeholder="Your name"
-                maxlength="255"
-                required
-                @error('name', 'catering')
-                    aria-invalid="true"
-                    aria-describedby="catering-name-error"
-                @enderror
-            >
-
-            @error('name', 'catering')
-                <div id="catering-name-error" class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <label class="{{ $labelClass }}">Name</label>
+            <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Your name"
+                required>
         </div>
 
         {{-- Email --}}
         <div class="mb-3">
-            <label for="catering-email" class="{{ $labelClass }}">
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="catering-email"
-                name="email"
-                value="{{ $cateringOld ? old('email') : '' }}"
-                class="form-control @error('email', 'catering') is-invalid @enderror"
-                placeholder="you@example.com"
-                maxlength="255"
-                required
-                @error('email', 'catering')
-                    aria-invalid="true"
-                    aria-describedby="catering-email-error"
-                @enderror
-            >
-
-            @error('email', 'catering')
-                <div id="catering-email-error" class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <label class="{{ $labelClass }}">Email</label>
+            <input type="email" name="email" value="{{ old('email') }}" class="form-control"
+                placeholder="you@example.com" required>
         </div>
 
         {{-- Australian phone number --}}
         <div class="mb-3">
-            <label for="catering-phone" class="{{ $labelClass }}">
-                Phone
-            </label>
-
-            <input
-                type="tel"
-                id="catering-phone"
-                name="phone"
-                value="{{ $cateringOld ? old('phone') : '' }}"
-                class="form-control @error('phone', 'catering') is-invalid @enderror"
-                placeholder="Your phone number"
-                maxlength="50"
-                pattern="(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8}"
-                title="Enter a valid Australian phone number, such as 0412 345 678 or +61 412 345 678."
-                required
-                @error('phone', 'catering')
-                    aria-invalid="true"
-                    aria-describedby="catering-phone-error"
-                @enderror
-            >
-
-            @error('phone', 'catering')
-                <div id="catering-phone-error" class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <label class="{{ $labelClass }}">Phone</label>
+            <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
+                placeholder="Your phone number" required>
         </div>
 
         {{-- Event date --}}
@@ -168,75 +103,22 @@
 
         {{-- Guest count --}}
         <div class="mb-3">
-            <label for="catering-guest-count" class="{{ $labelClass }}">
-                Guest count
-            </label>
-
-            <input
-                type="number"
-                id="catering-guest-count"
-                name="guest_count"
-                value="{{ $cateringOld ? old('guest_count') : '' }}"
-                class="form-control @error('guest_count', 'catering') is-invalid @enderror"
-                placeholder="Approximate guests"
-                min="1"
-                max="1000"
-                step="1"
-                required
-                @error('guest_count', 'catering')
-                    aria-invalid="true"
-                    aria-describedby="catering-guest-count-error"
-                @enderror
-            >
-
-            @error('guest_count', 'catering')
-                <div id="catering-guest-count-error" class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <label class="{{ $labelClass }}">Guest count</label>
+            <input type="number" name="guest_count" value="{{ old('guest_count') }}" class="form-control"
+                placeholder="Approximate guests" min="1" required>
         </div>
 
         {{-- Event type --}}
         <div class="mb-3">
-            <label for="catering-event-type" class="{{ $labelClass }}">
-                Event type
-            </label>
-
-            @php
-                // AQL-62: Preserve the selection only for Catering errors.
-                $selectedEventType = $cateringOld
-                    ? old('event_type', $eventType)
-                    : $eventType;
-            @endphp
-
-            <select
-                id="catering-event-type"
-                name="event_type"
-                class="form-select @error('event_type', 'catering') is-invalid @enderror"
-                required
-                @error('event_type', 'catering')
-                    aria-invalid="true"
-                    aria-describedby="catering-event-type-error"
-                @enderror
-            >
-                <option value="" {{ ! $selectedEventType ? 'selected' : '' }}>
-                    Choose an option
+            <label class="{{ $labelClass }}">Event type</label>
+            @php $selectedEventType = old('event_type', $eventType); @endphp
+            <select class="form-select" name="event_type">
+                <option value="" {{ !$selectedEventType ? 'selected' : '' }}>Choose an option</option>
+                <option value="corporate" {{ $selectedEventType === 'corporate' ? 'selected' : '' }}>Corporate</option>
+                <option value="wedding" {{ $selectedEventType === 'wedding' ? 'selected' : '' }}>Wedding</option>
+                <option value="private_party" {{ $selectedEventType === 'private_party' ? 'selected' : '' }}>Private party
                 </option>
-
-                <option value="corporate" {{ $selectedEventType === 'corporate' ? 'selected' : '' }}>
-                    Corporate
-                </option>
-
-                <option value="wedding" {{ $selectedEventType === 'wedding' ? 'selected' : '' }}>
-                    Wedding
-                </option>
-
-                <option value="private_party" {{ $selectedEventType === 'private_party' ? 'selected' : '' }}>
-                    Private party
-                </option>
-
-                <option value="off_site" {{ $selectedEventType === 'off_site' ? 'selected' : '' }}>
-                    Off-site catering
+                <option value="off_site" {{ $selectedEventType === 'off_site' ? 'selected' : '' }}>Off-site catering
                 </option>
             </select>
 
@@ -247,30 +129,26 @@
             @enderror
         </div>
 
-        {{-- Message --}}
+        {{-- EP2: package selection. Optional; packages come from admin-managed Packages. --}}
+        @if ($packages->isNotEmpty())
+            @php $selectedPackage = (string) old('package_id', request('package', $packageId)); @endphp
+            <div class="mb-3">
+                <label for="package_id" class="{{ $labelClass }}">Package</label>
+                <select class="form-select" name="package_id" id="package_id">
+                    <option value="" {{ $selectedPackage === '' ? 'selected' : '' }}>Not sure yet</option>
+                    @foreach ($packages as $package)
+                        <option value="{{ $package->id }}" {{ $selectedPackage === (string) $package->id ? 'selected' : '' }}>
+                            {{ $package->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+
         <div class="mb-3">
-            <label for="catering-message" class="{{ $labelClass }}">
-                Message
-            </label>
-
-            <textarea
-                id="catering-message"
-                name="message"
-                class="form-control @error('message', 'catering') is-invalid @enderror"
-                rows="3"
-                maxlength="5000"
-                placeholder="Tell us about your event"
-                @error('message', 'catering')
-                    aria-invalid="true"
-                    aria-describedby="catering-message-error"
-                @enderror
-            >{{ $cateringOld ? old('message') : '' }}</textarea>
-
-            @error('message', 'catering')
-                <div id="catering-message-error" class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <label class="{{ $labelClass }}">Message</label>
+            <textarea class="form-control" name="message" rows="3"
+                placeholder="Tell us about your event">{{ old('message') }}</textarea>
         </div>
 
         <button type="submit" class="btn btn-aquila-gold w-100">

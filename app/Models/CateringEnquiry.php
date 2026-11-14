@@ -17,6 +17,7 @@ class CateringEnquiry extends Model
         'event_date',
         'guest_count',
         'event_type',
+        'package_id',
         'message',
         'status',
     ];
@@ -31,5 +32,10 @@ class CateringEnquiry extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
     }
 }

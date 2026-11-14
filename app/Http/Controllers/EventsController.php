@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class EventsController extends Controller
 {
@@ -31,8 +32,13 @@ class EventsController extends Controller
             'regex:/\A(?:(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8})\z/',],
             'event_date' => ['required', 'date', 'after_or_equal:today'],
             'guest_count' => ['required', 'integer', 'min:1', 'max:1000'],
-            'event_type' => ['required', 'in:corporate,wedding,private_party,off_site'],
+            'event_type' => ['nullable', 'in:corporate,wedding,private_party,off_site'],
+            // EP2: optional package choice. Must be a package that is currently active,
+            // so a guest can't submit a hidden/retired package by editing the form.
+            'package_id' => ['nullable', 'integer', Rule::in(Package::active()->pluck('id')->all())],
             'message' => ['nullable', 'string', 'max:5000'],
+        ], [
+            'package_id.in' => 'Please choose one of the packages listed, or "Not sure yet".',
         ]);
 
         if ($request->user()) {
