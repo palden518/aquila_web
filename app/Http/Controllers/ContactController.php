@@ -27,9 +27,10 @@ class ContactController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
+            'website' => ['prohibited'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:50'],
+            'phone' => ['nullable','string','max:50','regex:/\A(?:(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8})\z/',],
             'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:5000'],
         ]);

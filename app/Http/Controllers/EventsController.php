@@ -25,9 +25,11 @@ class EventsController extends Controller
     public function storeEnquiry(Request $request): RedirectResponse
     {
         $validated = $request->validateWithBag('catering', [
+            'website' => ['prohibited'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'phone' => ['required', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:50',
+            'regex:/\A(?:(?:04|\+61 ?4)(?: ?[0-9]){8}|(?:0[2378]|\+61 ?[2378])(?: ?[0-9]){8})\z/',],
             'event_date' => ['required', 'date', 'after_or_equal:today'],
             'guest_count' => ['required', 'integer', 'min:1', 'max:1000'],
             'event_type' => ['nullable', 'in:corporate,wedding,private_party,off_site'],
@@ -42,6 +44,7 @@ class EventsController extends Controller
         if ($request->user()) {
             $validated['user_id'] = $request->user()->id;
         }
+
         $validated['status'] = 'new';
 
         $enquiry = CateringEnquiry::create($validated);
