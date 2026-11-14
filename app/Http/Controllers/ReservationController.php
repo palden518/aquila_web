@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class ReservationController extends Controller
 {
@@ -78,7 +79,10 @@ class ReservationController extends Controller
         $this->notifyCustomer($reservation);
 
         return back()
-            ->with('reservation_success', "Thanks, {$reservation->name} — your table request has been received. We'll confirm by email or phone shortly.")
+            ->with(
+                'reservation_success',
+                "Thanks, {$reservation->name} — your table request has been received. We'll confirm by email or phone shortly."
+            )
             ->withFragment('reserve');
     }
 
@@ -179,14 +183,24 @@ class ReservationController extends Controller
 
     protected function notifyAdmin(Reservation $reservation): void
     {
-        $adminEmail = Setting::get('admin_notification_email', config('mail.admin_address', 'hello@aquila.net.au'));
+        $adminEmail = Setting::get(
+            'admin_notification_email',
+            config('mail.admin_address', 'hello@aquila.net.au')
+        );
+
         $status = 'sent';
 
         try {
-            Mail::to($adminEmail)->send(new ReservationReceived($reservation));
+            Mail::to($adminEmail)->send(
+                new ReservationReceived($reservation)
+            );
         } catch (\Throwable $e) {
             $status = 'failed';
-            Log::error('Failed to send reservation admin alert: ' . $e->getMessage());
+
+            Log::error(
+                'Failed to send reservation admin alert: ' .
+                $e->getMessage()
+            );
         }
 
         NotificationLog::create([
@@ -194,7 +208,10 @@ class ReservationController extends Controller
             'notifiable_id' => $reservation->id,
             'channel' => 'email',
             'recipient' => $adminEmail,
-            'message' => "New reservation from {$reservation->name} for {$reservation->reservation_date->format('d M Y')}, party of {$reservation->party_size}.",
+            'message' =>
+                "New reservation from {$reservation->name} for " .
+                "{$reservation->reservation_date->format('d M Y')}, " .
+                "party of {$reservation->party_size}.",
             'status' => $status,
             'sent_at' => $status === 'sent' ? now() : null,
         ]);
