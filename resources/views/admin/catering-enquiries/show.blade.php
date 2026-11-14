@@ -34,6 +34,11 @@
                         <th>Event type</th>
                         <td>{{ $enquiry->event_type ? ucfirst(str_replace('_', ' ', $enquiry->event_type)) : '—' }}</td>
                     </tr>
+                    {{-- EP2: package chosen on the enquiry form (optional) --}}
+                    <tr>
+                        <th>Package</th>
+                        <td>{{ $enquiry->package?->name ?? 'Not sure yet' }}</td>
+                    </tr>
                     <tr>
                         <th>Message</th>
                         <td>{{ $enquiry->message ?: '—' }}</td>
@@ -56,7 +61,8 @@
                     @method('PATCH')
                     <select name="status" class="form-select mb-2">
                         @foreach ($statuses as $status)
-                            <option value="{{ $status }}" {{ $enquiry->status === $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
+                            <option value="{{ $status }}" {{ $enquiry->status === $status ? 'selected' : '' }}>
+                                {{ ucfirst($status) }}</option>
                         @endforeach
                     </select>
                     <button type="submit" class="btn btn-admin-gold w-100">Update status</button>
