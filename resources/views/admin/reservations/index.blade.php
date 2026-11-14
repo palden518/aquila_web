@@ -45,7 +45,7 @@
                         <td>{{ $reservation->reservation_date->format('d M Y') }}</td>
                         <td>{{ \Illuminate\Support\Carbon::parse($reservation->reservation_time)->format('g:i A') }}</td>
                         <td>{{ $reservation->party_size }}</td>
-                        <td><span class="badge badge-status-{{ $reservation->status === 'cancelled' ? 'declined' : ($reservation->status === 'new' ? 'new' : ($reservation->status === 'confirmed' ? 'confirmed' : 'completed')) }}">{{ ucfirst($reservation->status) }}</span></td>
+                        <td><span class="badge badge-status-{{ $reservation->status === 'cancelled' ? 'declined' : $reservation->status }}">{{ ucfirst($reservation->status) }}</span></td>
                         <td class="text-end">
                             <a href="{{ route('admin.reservations.show', $reservation) }}" class="btn btn-sm btn-outline-secondary">View</a>
                         </td>

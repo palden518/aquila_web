@@ -1,9 +1,9 @@
 @php
     $labelClass = 'form-label' . ($theme === 'dark' ? ' text-white' : '');
     $reservationErrors = $errors->getBag('reservation');
-
-    // AQL-62: Only restore input after a Reservation validation failure.
-    $reservationOld = $reservationErrors->any();
+    $maxPartySize = (int) \App\Models\Setting::get('reservation_max_guests', '40');
+    $openingTime = \App\Support\OpeningHours::openingTime();
+    $lastBookingTime = \App\Support\OpeningHours::lastBookingTime();
 @endphp
 
 <div class="{{ $theme === 'dark' ? 'inquiry-panel p-4' : '' }}">
@@ -14,6 +14,8 @@
             {{ $subheading }}
         </p>
     @endif
+
+    <p class="{{ $theme === 'dark' ? 'text-white-50' : 'text-muted' }} small mb-3">{{ \App\Support\OpeningHours::summary() }}</p>
 
     @if (session('reservation_success'))
         <div class="alert alert-success" role="status">
@@ -31,9 +33,7 @@
         </div>
     @endif
 
-    <form method="POST"
-          action="{{ route('reservations.store') }}"
-          data-reservation-form>
+    <form method="POST" action="{{ route('reservations.store') }}" data-reservation-form>
         @csrf
 
         {{-- AQL-68: Honeypot spam protection --}}
@@ -137,105 +137,26 @@
 
             {{-- Reservation Date --}}
             <div class="col-md-3 col-6">
-                <label for="reservation-date" class="{{ $labelClass }}">Date</label>
-
-                <input
-                    type="date"
-                    id="reservation-date"
-                    name="reservation_date"
-                    value="{{ $reservationOld ? old('reservation_date') : '' }}"
-                    min="{{ now('Australia/Brisbane')->toDateString() }}"
-                    class="form-control @error('reservation_date', 'reservation') is-invalid @enderror"
-                    required
-                    @error('reservation_date', 'reservation')
-                        aria-invalid="true"
-                        aria-describedby="reservation-date-error"
-                    @enderror
-                >
-
-                @error('reservation_date', 'reservation')
-                    <div id="reservation-date-error" class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+                <label class="{{ $labelClass }}">Date</label>
+                <input type="date" name="reservation_date" value="{{ old('reservation_date') }}" class="form-control" min="{{ now()->toDateString() }}" required>
             </div>
 
             {{-- Reservation Time --}}
             <div class="col-md-3 col-6">
-                <label for="reservation-time" class="{{ $labelClass }}">Time</label>
-
-                <input
-                    type="time"
-                    id="reservation-time"
-                    name="reservation_time"
-                    value="{{ $reservationOld ? old('reservation_time') : '' }}"
-                    class="form-control @error('reservation_time', 'reservation') is-invalid @enderror"
-                    required
-                    @error('reservation_time', 'reservation')
-                        aria-invalid="true"
-                        aria-describedby="reservation-time-error"
-                    @enderror
-                >
-
-                @error('reservation_time', 'reservation')
-                    <div id="reservation-time-error" class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+                <label class="{{ $labelClass }}">Time</label>
+                <input type="time" name="reservation_time" value="{{ old('reservation_time') }}" class="form-control" min="{{ $openingTime }}" max="{{ $lastBookingTime }}" required>
             </div>
 
             {{-- Party Size --}}
             <div class="col-12">
-                <label for="reservation-party-size" class="{{ $labelClass }}">Party size</label>
-
-                <input
-                    type="number"
-                    id="reservation-party-size"
-                    name="party_size"
-                    value="{{ $reservationOld ? old('party_size') : '' }}"
-                    class="form-control @error('party_size', 'reservation') is-invalid @enderror"
-                    placeholder="Number of guests"
-                    min="1"
-                    max="50"
-                    step="1"
-                    required
-                    @error('party_size', 'reservation')
-                        aria-invalid="true"
-                        aria-describedby="reservation-party-size-error"
-                    @enderror
-                >
-
-                @error('party_size', 'reservation')
-                    <div id="reservation-party-size-error" class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+                <label class="{{ $labelClass }}">Party size</label>
+                <input type="number" name="party_size" value="{{ old('party_size') }}" class="form-control" placeholder="Number of guests" min="1" max="{{ $maxPartySize }}" required>
             </div>
 
             {{-- Optional Notes --}}
             <div class="col-12">
-                <label for="reservation-notes" class="{{ $labelClass }}">
-                    Notes (optional)
-                </label>
-
-                <textarea
-                    id="reservation-notes"
-                    name="notes"
-                    class="form-control @error('notes', 'reservation') is-invalid @enderror"
-                    rows="3"
-                    maxlength="2000"
-                    placeholder="Dietary requirements, special occasion, seating preference..."
-                    @error('notes', 'reservation')
-                        aria-invalid="true"
-                        aria-describedby="reservation-notes-error"
-                    @enderror
-                >{{ $reservationOld ? old('notes') : '' }}</textarea>
-
-                @error('notes', 'reservation')
-                    <div id="reservation-notes-error" class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+                <label class="{{ $labelClass }}">Special requests (optional)</label>
+                <textarea class="form-control" name="notes" rows="3" placeholder="Dietary requirements, special occasion, seating preference...">{{ old('notes') }}</textarea>
             </div>
 
         </div>
@@ -245,3 +166,24 @@
         </button>
     </form>
 </div>
+
+<script>
+    // Stop the customer clicking "Request a table" twice while the booking is being sent.
+    document.querySelectorAll('[data-reservation-form]').forEach(function (form) {
+        var button = form.querySelector('button[type="submit"]');
+        var originalText = button.innerHTML;
+
+        form.addEventListener('submit', function () {
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending your request...';
+        });
+
+        // If the customer comes back with the browser's Back button, make the button usable again.
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        });
+    });
+</script>

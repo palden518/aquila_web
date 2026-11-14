@@ -35,7 +35,7 @@
                         <td>{{ $reservation->party_size }}</td>
                     </tr>
                     <tr>
-                        <th>Notes</th>
+                        <th>Special requests</th>
                         <td style="white-space: pre-line;">{{ $reservation->notes ?: '—' }}</td>
                     </tr>
                     <tr>
