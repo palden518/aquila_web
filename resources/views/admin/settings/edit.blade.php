@@ -14,7 +14,7 @@
                 @foreach ($groupFields as $key => $label)
                     <div class="mb-3">
                         <label class="form-label">{{ $label }}</label>
-                        @if (in_array($key, ['hero_copy', 'about_lede', 'featured_dish_description']))
+                        @if (in_array($key, ['hero_copy', 'about_lede', 'featured_dish_description', 'about_intro', 'about_story_paragraph_1', 'about_story_paragraph_2']))
                             <textarea name="{{ $key }}" class="form-control" rows="3">{{ old($key, $values[$key]) }}</textarea>
                         @elseif (in_array($key, ['reservation_opening_time', 'reservation_closing_time']))
                             <input type="time" name="{{ $key }}" class="form-control" style="max-width: 12rem" value="{{ old($key, $values[$key]) }}">

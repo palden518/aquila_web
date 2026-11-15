@@ -31,25 +31,29 @@ class SettingController extends Controller
             'featured_dish_description' => 'Featured dish description',
             'featured_dish_image' => 'Featured dish image URL',
         ],
-        'Table reservations' => [
-            'reservation_max_guests' => 'Maximum guests at one time (the restaurant\'s seating capacity)',
-            'reservation_table_minutes' => 'Table time in minutes (how long each booking holds a table)',
-            'reservation_opening_time' => 'Opening time',
-            'reservation_closing_time' => 'Closing time (the last booking is closing time minus table time)',
-            'reservation_closed_days' => 'Closed days (no bookings on these days)',
+        'Online ordering' => [
+            'orders_enabled' => 'Accept online orders? Type 1 for yes, 0 to pause ordering',
+            'orders_card_enabled' => 'Offer card payment (Stripe) at checkout? Type 1 for yes, 0 to pause. Needs Stripe keys in .env',
+            'orders_open_time' => 'First pickup time each day (24-hour, e.g. 07:00)',
+            'orders_close_time' => 'Last pickup time each day (24-hour, e.g. 21:00)',
+            'orders_lead_minutes' => 'Minimum minutes between ordering and pickup (e.g. 30)',
         ],
-    ];
-
-    /**
-     * Values used when a setting has never been saved, so the form
-     * shows what the website is actually using.
-     */
-    protected array $defaults = [
-        'reservation_max_guests' => '40',
-        'reservation_table_minutes' => '120',
-        'reservation_opening_time' => '07:00',
-        'reservation_closing_time' => '15:00',
-        'reservation_closed_days' => 'saturday,sunday',
+        'About page' => [
+            'about_eyebrow' => 'Eyebrow text (small label above the heading)',
+            'about_heading' => 'Heading (HTML allowed, e.g. <span class="text-gold-italic">italic gold</span>)',
+            'about_intro' => 'Intro paragraph (under the heading)',
+            'about_image' => 'Hero image URL',
+            'about_story_heading' => 'Story section heading',
+            'about_story_paragraph_1' => 'Story — first paragraph',
+            'about_story_paragraph_2' => 'Story — second paragraph',
+            'about_story_image' => 'Story section image URL',
+            'about_stat_1_value' => 'Stat 1 — number (e.g. 20+)',
+            'about_stat_1_label' => 'Stat 1 — label (e.g. Years in Brisbane)',
+            'about_stat_2_value' => 'Stat 2 — number (e.g. 15k)',
+            'about_stat_2_label' => 'Stat 2 — label (e.g. Guests served yearly)',
+            'about_stat_3_value' => 'Stat 3 — number (e.g. 7)',
+            'about_stat_3_label' => 'Stat 3 — label (e.g. Days open a week)',
+        ],
     ];
 
     public function edit()
@@ -84,37 +88,11 @@ class SettingController extends Controller
         }
         $rules['site_email'] = ['nullable', 'email', 'max:255'];
         $rules['admin_notification_email'] = ['nullable', 'email', 'max:255'];
-        $rules['reservation_max_guests'] = ['required', 'integer', 'min:1', 'max:1000'];
-        $rules['reservation_table_minutes'] = ['required', 'integer', 'min:15', 'max:480'];
-        $rules['reservation_opening_time'] = ['required', 'date_format:H:i'];
-        $rules['reservation_closing_time'] = ['required', 'date_format:H:i', 'after:reservation_opening_time'];
-        $rules['reservation_closed_days'] = ['nullable', 'array'];
-        $rules['reservation_closed_days.*'] = [Rule::in(array_keys(OpeningHours::DAYS))];
-
-        $validator = validator($request->all(), $rules, [
-            'reservation_closing_time.after' => 'The closing time must be later than the opening time.',
-        ], [
-            'reservation_max_guests' => 'maximum guests at one time',
-            'reservation_table_minutes' => 'table time in minutes',
-            'reservation_opening_time' => 'opening time',
-            'reservation_closing_time' => 'closing time',
-        ]);
-
-        // There must be room for at least one booking between opening and closing.
-        $validator->after(function ($validator) use ($request) {
-            if ($validator->errors()->isNotEmpty()) {
-                return;
-            }
-
-            $open = Carbon::createFromFormat('H:i', $request->input('reservation_opening_time'));
-            $close = Carbon::createFromFormat('H:i', $request->input('reservation_closing_time'));
-
-            if ($open->diffInMinutes($close) < (int) $request->input('reservation_table_minutes')) {
-                $validator->errors()->add('reservation_table_minutes', 'The table time is longer than the opening hours, so no bookings could be made.');
-            }
-        });
-
-        $data = $validator->validate();
+        $rules['orders_enabled'] = ['nullable', 'in:0,1'];
+        $rules['orders_card_enabled'] = ['nullable', 'in:0,1'];
+        $rules['orders_open_time'] = ['nullable', 'date_format:H:i'];
+        $rules['orders_close_time'] = ['nullable', 'date_format:H:i', 'after:orders_open_time'];
+        $rules['orders_lead_minutes'] = ['nullable', 'integer', 'min:0', 'max:240'];
 
         // Save the ticked closed days as one value, e.g. "saturday,sunday".
         $data['reservation_closed_days'] = implode(',', $data['reservation_closed_days'] ?? []);

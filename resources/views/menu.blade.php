@@ -31,6 +31,7 @@
 </head>
 
 <body class="aquila-menu-page">
+    <x-cart-flash />
 
     {{-- Navbar --}}
      <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
@@ -52,14 +53,17 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
+                    <li class="nav-item"><x-cart-link /></li>
                 </ul>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
             </div>
         </div>
     </nav>
+    <button class="floating-btn" onclick="window.location.href='{{ route('ordermenu') }}'"> Order</button>
+
 
 
     {{-- Hero --}}
@@ -193,7 +197,7 @@
                         @forelse ($category->availableItems as $item)
 
                             <div class="col-lg-6">
-                                <article class="card menu-item-card h-100 border-0">
+                                <article class="card menu-item-card h-100 border-0" id="item-{{ $item->id }}">
 
                                     <div class="card-body p-4">
 
@@ -212,6 +216,14 @@
                                         <p class="menu-item-description mb-0">
                                             {{ $item->description }}
                                         </p>
+
+                                        <!-- <form method="POST" action="{{ route('cart.add') }}" class="d-flex align-items-center gap-2 mt-3">
+                                            @csrf
+                                            <input type="hidden" name="menu_item_id" value="{{ $item->id }}">
+                                            <label class="visually-hidden" for="qty-{{ $item->id }}">Quantity for {{ $item->name }}</label> -->
+                                            <!-- <input type="number" id="qty-{{ $item->id }}" name="quantity" value="1" min="1" max="20" class="form-control form-control-sm" style="width:72px;"> 
+                                            <button type="submit" class="btn btn-aquila-gold btn-sm">Add to cart</button>
+                                        </form> -->
 
                                     </div>
 
