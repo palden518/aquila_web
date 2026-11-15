@@ -38,7 +38,7 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
                 </ul>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
@@ -289,7 +289,7 @@
                         <li><a href="{{ route('menu') }}">Menu</a></li>
                         <li><a href="{{ route('specials') }}">Specials and packages</a></li>
                         <li><a href="#events">Events and catering</a></li>
-                        <li><a href="#about">About</a></li>
+                        <li><a href="{{ route('about') }}">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>

@@ -1,0 +1,20 @@
+.about-skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1100;
+    padding: 0.75rem 1rem;
+    transform: translateY(calc(-100% - 1rem));
+    border: 2px solid #27255f;
+    border-radius: 0.25rem;
+    background: #fff;
+    color: #27255f;
+}
+
+.about-skip-link:focus,
+.about-skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px #27255f;
+}
