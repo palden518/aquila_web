@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MenuCategory;
+use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -49,6 +50,17 @@ class MenuCategoryController extends Controller
 
     public function destroy(MenuCategory $menuCategory): RedirectResponse
     {
+        // Deleting a category also deletes its items, which isn't allowed
+        // once any of them appear on a past order.
+        $hasOrders = OrderItem::whereIn('menu_item_id', $menuCategory->items()->select('id'))->exists();
+
+        if ($hasOrders) {
+            return redirect()->route('admin.menu-categories.index')->with(
+                'error',
+                "\"{$menuCategory->name}\" contains items that have been ordered, so it can't be deleted. Switch those items off instead."
+            );
+        }
+
         $menuCategory->delete();
 
         return redirect()->route('admin.menu-categories.index')->with('status', 'Category deleted.');

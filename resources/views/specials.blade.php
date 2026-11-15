@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
+    <x-cart-flash />
 
     {{-- ============================= NAVBAR ============================= --}}
     <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
@@ -38,8 +39,9 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
+                    <li class="nav-item"><x-cart-link /></li>
                 </ul>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
@@ -90,6 +92,11 @@
                                 <h3>{{ $weeklySpecial->name }}</h3>
                                 <p>{{ $weeklySpecial->description }}</p>
                                 <div class="special-price">{{ $weeklySpecial->display_price }} <span>per serve</span></div>
+                                <form method="POST" action="{{ route('cart.add') }}" class="mt-3 mb-2">
+                                    @csrf
+                                    <input type="hidden" name="menu_item_id" value="{{ $weeklySpecial->id }}">
+                                    <button type="submit" class="btn btn-aquila-gold">Add to cart</button>
+                                </form>
 
                                 <a href="{{ route('menu') }}" class="aq-link-arrow">View full menu &rarr;</a>
                             </div>
@@ -184,7 +191,7 @@
                         <li><a href="{{ route('menu') }}">Menu</a></li>
                         <li><a href="{{ route('specials') }}">Specials and packages</a></li>
                         <li><a href="{{ route('events') }}">Events and catering</a></li>
-                        <li><a href="{{ route('home') }}#about">About</a></li>
+                        <li><a href="{{ route('about') }}">About</a></li>
                         <li><a href="{{ route('contact') }}">Contact</a></li>
                     </ul>
                 </div>

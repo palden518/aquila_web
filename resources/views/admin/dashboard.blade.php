@@ -12,14 +12,14 @@
         </div>
         <div class="col-md-3">
             <div class="admin-stat-card">
-                <div class="admin-stat-value">{{ $stats['total_menu_items'] }}</div>
-                <div class="admin-stat-label">Menu items</div>
+                <div class="admin-stat-value">{{ $stats['new_reservations'] }}</div>
+                <div class="admin-stat-label">New table reservations</div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="admin-stat-card">
-                <div class="admin-stat-value">{{ $stats['unavailable_items'] }}</div>
-                <div class="admin-stat-label">Unavailable items</div>
+                <div class="admin-stat-value">{{ $stats['total_menu_items'] }}</div>
+                <div class="admin-stat-label">Menu items</div>
             </div>
         </div>
         <div class="col-md-3">
@@ -29,6 +29,23 @@
             </div>
         </div>
     </div>
+
+    @can('manage orders')
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-value">{{ $stats['pending_orders'] }}</div>
+                    <div class="admin-stat-label">Pending orders</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-value">{{ $stats['todays_pickups'] }}</div>
+                    <div class="admin-stat-label">Pickups today</div>
+                </div>
+            </div>
+        </div>
+    @endcan
 
     <div class="admin-card">
         <div class="d-flex justify-content-between align-items-center mb-3">

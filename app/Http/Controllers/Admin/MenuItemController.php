@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
+use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -73,6 +74,15 @@ class MenuItemController extends Controller
 
     public function destroy(MenuItem $menuItem): RedirectResponse
     {
+        // order_items.menu_item_id is RESTRICT on delete, so an item that has
+        // been ordered can't be removed without breaking order history.
+        if (OrderItem::where('menu_item_id', $menuItem->id)->exists()) {
+            return redirect()->route('admin.menu-items.index')->with(
+                'error',
+                "\"{$menuItem->name}\" has been ordered before, so it can't be deleted. Switch off \"Available\" instead to hide it from the menu."
+            );
+        }
+
         $menuItem->delete();
 
         return redirect()->route('admin.menu-items.index')->with('status', 'Menu item deleted.');
