@@ -95,7 +95,7 @@
                                 <form method="POST" action="{{ route('cart.add') }}" class="mt-3 mb-2">
                                     @csrf
                                     <input type="hidden" name="menu_item_id" value="{{ $weeklySpecial->id }}">
-                                    <button type="submit" class="btn btn-aquila-gold">Add to cart</button>
+                                    <button type="submit" class="btn btn-aquila-gold">Add to order</button>
                                 </form>
 
                                 <a href="{{ route('menu') }}" class="aq-link-arrow">View full menu &rarr;</a>

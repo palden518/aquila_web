@@ -684,3 +684,42 @@ button:focus-visible,
     margin-top: 0.4rem;
   }
 }
+
+.aq-field label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.aq-field input,
+.aq-field select,
+.aq-field textarea {
+    display: block;
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    font: inherit;
+    color: #1b2433;
+    background: #f6f3ee;
+    border: 1px solid #ddd6ca;
+    border-radius: 6px;
+}
+
+.aq-field input:focus,
+.aq-field select:focus,
+.aq-field textarea:focus {
+    outline: none;
+    border-color: #b8893a;
+    box-shadow: 0 0 0 3px rgba(184, 137, 58, 0.35);
+}
+
+.aq-field .is-invalid {
+    border-color: #b3261e;
+}
+
+.aq-field-error {
+    display: block;
+    margin-top: 0.3rem;
+    color: #b3261e;
+    font-size: 0.825rem;
+}

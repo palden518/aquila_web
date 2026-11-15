@@ -36,7 +36,6 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('ordermenu') ? 'active' : '' }}" href="{{ route('ordermenu') }}">Order</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
                     
                     <li class="nav-item"><x-cart-link /></li>
@@ -87,12 +86,12 @@
                 <div class="col-lg-6">
                     <x-reservation-form theme="dark" />
                 </div>
-                <div class="col-lg-6">
+                <!-- <div class="col-lg-6">
                     <x-catering-enquiry-form
                         theme="dark"
                         subheading="Office lunches, corporate functions, and catering delivery."
                         event-type="corporate" />
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
