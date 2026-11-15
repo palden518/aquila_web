@@ -31,6 +31,16 @@
 </head>
 
 <body class="aquila-menu-page">
+    @php
+        $categoryImages = [
+            'breakfast' => 'breakfast.webp',
+            'lunch' => 'lunch.webp',
+            'mains' => 'mains.webp',
+            'salads' => 'salads.webp',
+            'pizza' => 'pizza.webp',
+            'sharing' => 'sharing.webp',
+        ];
+    @endphp
 
     {{-- Navbar --}}
      <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
@@ -160,11 +170,25 @@
                         </div>
                     </div>
 
+                    @php
+                        $categoryImage = $categoryImages[$category->slug] ?? null;
+                        $categoryImagePath = $categoryImage
+                            ? 'images/menu-categories/' . $categoryImage
+                            : null;
+                    @endphp
+                    @if ($categoryImagePath && is_file(public_path($categoryImagePath)))
+                        <img
+                            src="{{ asset($categoryImagePath) }}"
+                            alt="{{ $category->name }} dishes at Aquila"
+                            class="menu-category-image"
+                        >
+                    @endif
+
                     {{-- Chef's feature card, shown once on the Mains section --}}
                     @if ($category->slug === 'mains')
                         <div class="card featured-menu-card border-0 mb-4">
                             <div class="row g-0 align-items-center">
-                                <div class="col-lg-8">
+                                <div class="{{ $featured['image'] ? 'col-lg-8' : 'col-12' }}">
                                     <div class="card-body p-4 p-lg-5">
                                         <span class="featured-label">
                                             Chef's feature
@@ -177,13 +201,15 @@
                                         </p>
                                     </div>
                                 </div>
+                                @if ($featured['image'])
                                 <div class="col-lg-4">
                                     <img
                                         src="{{ $featured['image'] }}"
-                                        alt="Featured dinner"
+                                        alt="Featured dish: {{ $featured['title'] }}"
                                         class="featured-menu-image"
                                     >
                                 </div>
+                                @endif
                             </div>
                         </div>
                     @endif
