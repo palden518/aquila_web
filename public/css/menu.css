@@ -99,6 +99,19 @@
     font-size: clamp(2.2rem, 5vw, 3.7rem);
 }
 
+.menu-section:nth-of-type(odd) .menu-eyebrow,
+.menu-section:nth-of-type(odd) .menu-section-title {
+    color: #8a5a10;
+}
+
+.menu-section:nth-of-type(odd) .text-muted {
+    color: #69635a !important;
+}
+
+.menu-section:nth-of-type(even) .text-muted {
+    color: #f8f3e8 !important;
+}
+
 .menu-section-note {
     color: #aaa295;
     font-size: 0.9rem;
@@ -135,7 +148,7 @@
 
 .menu-item-price {
     flex-shrink: 0;
-    color: #b87911;
+    color: #8a5a10;
     font-weight: 800;
 }
 
