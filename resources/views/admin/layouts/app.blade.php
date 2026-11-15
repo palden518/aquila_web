@@ -38,8 +38,11 @@
 
                 @can('manage catering')
                     <a href="{{ route('admin.catering-enquiries.index') }}" class="admin-nav-link {{ request()->routeIs('admin.catering-enquiries.*') ? 'active' : '' }}">Catering enquiries</a>
-                    <a href="{{ route('admin.reservations.index') }}" class="admin-nav-link {{ request()->routeIs('admin.reservations.*') ? 'active' : '' }}">Table reservations</a>
                     <a href="{{ route('admin.contact-messages.index') }}" class="admin-nav-link {{ request()->routeIs('admin.contact-messages.*') ? 'active' : '' }}">Contact messages</a>
+                @endcan
+
+                @can('manage reservations')
+                    <a href="{{ route('admin.reservations.index') }}" class="admin-nav-link {{ request()->routeIs('admin.reservations.*') ? 'active' : '' }}">Table reservations</a>
                 @endcan
 
                 @can('manage settings')

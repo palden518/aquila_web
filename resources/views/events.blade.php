@@ -16,6 +16,7 @@
     {{-- Project CSS --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/events.css') }}">
+    <script src="{{ asset('js/form-validation.js') }}" defer></script>
 </head>
 <body class="event-page">
     <x-cart-flash />

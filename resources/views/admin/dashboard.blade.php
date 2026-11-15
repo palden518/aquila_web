@@ -10,6 +10,16 @@
                 <div class="admin-stat-label">New catering enquiries</div>
             </div>
         </div>
+        @can('manage reservations')
+            <div class="col-md-3">
+                <a href="{{ route('admin.reservations.index', ['status' => 'new']) }}" class="text-decoration-none text-reset">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-value">{{ $stats['new_reservations'] }}</div>
+                        <div class="admin-stat-label">New table reservations</div>
+                    </div>
+                </a>
+            </div>
+        @endcan
         <div class="col-md-3">
             <div class="admin-stat-card">
                 <div class="admin-stat-value">{{ $stats['new_reservations'] }}</div>

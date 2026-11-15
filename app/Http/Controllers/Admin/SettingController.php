@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Support\OpeningHours;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
 {
@@ -58,13 +61,17 @@ class SettingController extends Controller
         $values = [];
         foreach ($this->fields as $group) {
             foreach (array_keys($group) as $key) {
-                $values[$key] = Setting::get($key, '');
+                $values[$key] = Setting::get($key, $this->defaults[$key] ?? '');
             }
         }
+
+        // The closed days are shown as tick boxes, so turn "saturday,sunday" into a list.
+        $values['reservation_closed_days'] = OpeningHours::closedDays();
 
         return view('admin.settings.edit', [
             'fields' => $this->fields,
             'values' => $values,
+            'days' => OpeningHours::DAYS,
         ]);
     }
 
@@ -87,7 +94,8 @@ class SettingController extends Controller
         $rules['orders_close_time'] = ['nullable', 'date_format:H:i', 'after:orders_open_time'];
         $rules['orders_lead_minutes'] = ['nullable', 'integer', 'min:0', 'max:240'];
 
-        $data = $request->validate($rules);
+        // Save the ticked closed days as one value, e.g. "saturday,sunday".
+        $data['reservation_closed_days'] = implode(',', $data['reservation_closed_days'] ?? []);
 
         Setting::setMany($data);
 

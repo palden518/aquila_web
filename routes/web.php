@@ -39,10 +39,31 @@ Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 Route::get('/ordermenu', [OrdermenuController::class, 'index'])->name('ordermenu');
 Route::get('/specials', [SpecialsController::class, 'index'])->name('specials');
 Route::get('/events', [EventsController::class, 'index'])->name('events');
-Route::post('/events/enquiry', [EventsController::class, 'storeEnquiry'])->name('events.enquiry.store');
-Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+/*
+|--------------------------------------------------------------------------
+| Public form submissions — AQL-69 Rate Limiting
+|--------------------------------------------------------------------------
+*/
+
+// Maximum 5 catering enquiries per minute.
+Route::post('/events/enquiry', [EventsController::class, 'storeEnquiry'])
+    ->middleware('throttle:catering-form')
+    ->name('events.enquiry.store');
+
+// Maximum 5 reservation requests per minute.
+Route::post('/reservations', [ReservationController::class, 'store'])
+    ->middleware('throttle:reservation-form')
+    ->name('reservations.store');
+
+// Contact page remains accessible without rate limiting.
+Route::get('/contact', [ContactController::class, 'index'])
+    ->name('contact');
+
+// Maximum 5 contact messages per minute.
+Route::post('/contact', [ContactController::class, 'store'])
+    ->middleware('throttle:contact-form')
+    ->name('contact.store');
 
 // Online ordering: cart -> checkout -> confirmation
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
@@ -109,7 +130,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
         Route::get('contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
         Route::patch('contact-messages/{contactMessage}/status', [ContactMessageController::class, 'updateStatus'])->name('contact-messages.status');
+    });
 
+    Route::middleware('permission:manage reservations')->group(function () {
         Route::get('reservations', [AdminReservationController::class, 'index'])->name('reservations.index');
         Route::get('reservations/{reservation}', [AdminReservationController::class, 'show'])->name('reservations.show');
         Route::patch('reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('reservations.status');

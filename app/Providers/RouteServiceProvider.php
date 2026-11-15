@@ -13,21 +13,47 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * The path to your application's "home" route.
      *
-     * Typically, users are redirected here after authentication.
-     *
      * @var string
      */
     public const HOME = '/home';
 
     /**
-     * Define your route model bindings, pattern filters, and other route configuration.
+     * Define route configuration and rate limiters.
      */
     public function boot(): void
     {
+        // Existing API rate limiter — unchanged.
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            return Limit::perMinute(60)
+                ->by($request->user()?->id ?: $request->ip());
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | AQL-69: Public Form Rate Limiting
+        |--------------------------------------------------------------------------
+        |
+        | Each form has an independent rate limit.
+        | Maximum 5 submissions per minute per IP address.
+        |
+        */
+
+        RateLimiter::for('contact-form', function (Request $request) {
+            return Limit::perMinute(5)
+                ->by('contact:' . $request->ip());
+        });
+
+        RateLimiter::for('reservation-form', function (Request $request) {
+            return Limit::perMinute(5)
+                ->by('reservation:' . $request->ip());
+        });
+
+        RateLimiter::for('catering-form', function (Request $request) {
+            return Limit::perMinute(5)
+                ->by('catering:' . $request->ip());
+        });
+
+        // Existing route registration — unchanged.
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
