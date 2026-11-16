@@ -168,7 +168,7 @@
                     @if ($category->slug === 'mains')
                         <div class="card featured-menu-card border-0 mb-4">
                             <div class="row g-0 align-items-center">
-                                <div class="col-lg-8">
+                                <div class="{{ $featured['image'] ? 'col-lg-8' : 'col-12' }}">
                                     <div class="card-body p-4 p-lg-5">
                                         <span class="featured-label">
                                             Chef's feature
@@ -181,13 +181,15 @@
                                         </p>
                                     </div>
                                 </div>
+                                @if ($featured['image'])
                                 <div class="col-lg-4">
                                     <img
                                         src="{{ $featured['image'] }}"
-                                        alt="Featured dinner"
+                                        alt="Featured dish: {{ $featured['title'] }}"
                                         class="featured-menu-image"
                                     >
                                 </div>
+                                @endif
                             </div>
                         </div>
                     @endif
@@ -226,7 +228,6 @@
                                         </form> -->
 
                                     </div>
-
                                 </article>
                             </div>
 
