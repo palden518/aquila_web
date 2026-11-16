@@ -15,6 +15,7 @@ body.event-page {
     font-family: "Cagliostro", Arial, sans-serif;
 }
 
+
 .event-navbar {
     background: rgba(15, 11, 38, 0.94);
     box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05);
@@ -162,7 +163,7 @@ body.event-page {
 }
 
 .feature-card {
-    background: rgba(255, 255, 255, 0.06);
+    background: #d3af37;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 1.5rem;
     padding: 2rem 1.5rem;

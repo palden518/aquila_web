@@ -78,6 +78,9 @@
                     <h1 class="display-2 fw-bold mb-3">
                         Aquila Menu
                     </h1>
+                    <h2 class="display-2 fw-bold mb-3">
+                        (PICK UP ONLY)
+                    </h2>
 
                     <!-- <p class="lead menu-hero-description">
                         Italian and Australian cuisine prepared with
