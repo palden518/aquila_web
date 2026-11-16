@@ -7,7 +7,6 @@ use App\Models\Setting;
 use App\Support\OpeningHours;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
@@ -59,13 +58,14 @@ class SettingController extends Controller
     public function edit()
     {
         $values = [];
+
         foreach ($this->fields as $group) {
             foreach (array_keys($group) as $key) {
-                $values[$key] = Setting::get($key, $this->defaults[$key] ?? '');
+                $values[$key] = Setting::get($key, '');
             }
         }
 
-        // The closed days are shown as tick boxes, so turn "saturday,sunday" into a list.
+        // Convert saved closed days into an array for the checkboxes.
         $values['reservation_closed_days'] = OpeningHours::closedDays();
 
         return view('admin.settings.edit', [
@@ -78,27 +78,67 @@ class SettingController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $allKeys = [];
+
         foreach ($this->fields as $group) {
             $allKeys = array_merge($allKeys, array_keys($group));
         }
 
+        // Default validation rules for editable content.
         $rules = [];
+
         foreach ($allKeys as $key) {
             $rules[$key] = ['nullable', 'string', 'max:5000'];
         }
+
+        // Contact details.
         $rules['site_email'] = ['nullable', 'email', 'max:255'];
         $rules['admin_notification_email'] = ['nullable', 'email', 'max:255'];
+
+        // Online ordering settings.
         $rules['orders_enabled'] = ['nullable', 'in:0,1'];
         $rules['orders_card_enabled'] = ['nullable', 'in:0,1'];
         $rules['orders_open_time'] = ['nullable', 'date_format:H:i'];
-        $rules['orders_close_time'] = ['nullable', 'date_format:H:i', 'after:orders_open_time'];
-        $rules['orders_lead_minutes'] = ['nullable', 'integer', 'min:0', 'max:240'];
+        $rules['orders_close_time'] = [
+            'nullable',
+            'date_format:H:i',
+            'after:orders_open_time',
+        ];
+        $rules['orders_lead_minutes'] = [
+            'nullable',
+            'integer',
+            'min:0',
+            'max:240',
+        ];
 
-        // Save the ticked closed days as one value, e.g. "saturday,sunday".
-        $data['reservation_closed_days'] = implode(',', $data['reservation_closed_days'] ?? []);
+        // Reservation closed-day validation.
+        $rules['reservation_closed_days'] = [
+            'sometimes',
+            'array',
+            'max:7',
+        ];
 
+        $rules['reservation_closed_days.*'] = [
+            'required',
+            'string',
+            'distinct',
+            Rule::in(array_keys(OpeningHours::DAYS)),
+        ];
+
+        // Execute server-side validation before saving.
+        $data = $request->validate($rules);
+
+        // Update closed days only when explicitly submitted.
+        if (array_key_exists('reservation_closed_days', $data)) {
+            $data['reservation_closed_days'] = implode(
+                 ',',
+                 $data['reservation_closed_days']
+            );
+        }
+        // Persist validated settings only.
         Setting::setMany($data);
 
-        return redirect()->route('admin.settings.edit')->with('status', 'Site content updated.');
+        return redirect()
+            ->route('admin.settings.edit')
+            ->with('status', 'Site content updated.');
     }
 }
