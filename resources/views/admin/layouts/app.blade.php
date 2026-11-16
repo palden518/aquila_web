@@ -23,6 +23,12 @@
                     <div class="admin-nav-group">Menu</div>
                     <a href="{{ route('admin.menu-categories.index') }}" class="admin-nav-link {{ request()->routeIs('admin.menu-categories.*') ? 'active' : '' }}">Categories</a>
                     <a href="{{ route('admin.menu-items.index') }}" class="admin-nav-link {{ request()->routeIs('admin.menu-items.*') ? 'active' : '' }}">Menu items</a>
+                    <a href="{{ route('admin.addons.index') }}" class="admin-nav-link {{ request()->routeIs('admin.addons.*') ? 'active' : '' }}">Add-ons</a>
+                @endcan
+
+                @can('manage orders')
+                    <div class="admin-nav-group">Orders</div>
+                    <a href="{{ route('admin.orders.index') }}" class="admin-nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">Online orders</a>
                 @endcan
 
                 @can('manage packages')
@@ -32,8 +38,11 @@
 
                 @can('manage catering')
                     <a href="{{ route('admin.catering-enquiries.index') }}" class="admin-nav-link {{ request()->routeIs('admin.catering-enquiries.*') ? 'active' : '' }}">Catering enquiries</a>
-                    <a href="{{ route('admin.reservations.index') }}" class="admin-nav-link {{ request()->routeIs('admin.reservations.*') ? 'active' : '' }}">Table reservations</a>
                     <a href="{{ route('admin.contact-messages.index') }}" class="admin-nav-link {{ request()->routeIs('admin.contact-messages.*') ? 'active' : '' }}">Contact messages</a>
+                @endcan
+
+                @can('manage reservations')
+                    <a href="{{ route('admin.reservations.index') }}" class="admin-nav-link {{ request()->routeIs('admin.reservations.*') ? 'active' : '' }}">Table reservations</a>
                 @endcan
 
                 @can('manage settings')

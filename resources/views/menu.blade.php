@@ -31,6 +31,8 @@
 </head>
 
 <body class="aquila-menu-page">
+    <x-cart-flash />
+
     {{-- Navbar --}}
      <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
         <div class="container">
@@ -51,14 +53,17 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
+                    <li class="nav-item"><x-cart-link /></li>
                 </ul>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
             </div>
         </div>
     </nav>
+    <button class="floating-btn" onclick="window.location.href='{{ route('ordermenu') }}'"> Order</button>
+
 
 
     {{-- Hero --}}
@@ -193,52 +198,35 @@
 
                         @forelse ($category->availableItems as $item)
 
-                            <div class="col-md-6">
-                                <article class="card menu-item-card h-100 border-0">
-                                    <div class="menu-item-card-layout">
-                                        @if ($item->menu_photo)
-                                            <figure class="menu-item-photo">
-                                                <img
-                                                    class="menu-item-image"
-                                                    src="{{ $item->menu_photo['src'] }}"
-                                                    alt="{{ $item->menu_photo['alt'] }}"
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                >
-                                                @if ($item->menu_photo['caption'])
-                                                    <figcaption class="menu-item-photo-caption">
-                                                        {{ $item->menu_photo['caption'] }}
-                                                    </figcaption>
-                                                @endif
-                                            </figure>
-                                        @else
-                                            <div
-                                                class="menu-item-image-fallback"
-                                                role="img"
-                                                aria-label="Photo not yet available for {{ $item->name }}"
-                                            >
-                                                <svg aria-hidden="true" viewBox="0 0 48 48" focusable="false">
-                                                    <rect x="5" y="8" width="38" height="32" rx="4"></rect>
-                                                    <circle cx="17" cy="19" r="3"></circle>
-                                                    <path d="m8 35 11-11 7 7 5-5 9 9"></path>
-                                                </svg>
-                                                <span>Photo coming soon</span>
-                                            </div>
-                                        @endif
+                            <div class="col-lg-6">
+                                <article class="card menu-item-card h-100 border-0" id="item-{{ $item->id }}">
 
-                                        <div class="menu-item-copy">
-                                            <div class="menu-item-heading">
-                                                <h3 class="menu-item-title mb-2">
-                                                    {{ $item->name }}
-                                                </h3>
-                                                <span class="menu-item-price">
-                                                    {{ $item->display_price }}
-                                                </span>
-                                            </div>
-                                            <p class="menu-item-description mb-0">
-                                                {{ $item->description }}
-                                            </p>
+                                    <div class="card-body p-4">
+
+                                        <div class="d-flex justify-content-between gap-3">
+
+                                            <h3 class="menu-item-title mb-2">
+                                                {{ $item->name }}
+                                            </h3>
+
+                                            <span class="menu-item-price">
+                                                {{ $item->display_price }}
+                                            </span>
+
                                         </div>
+
+                                        <p class="menu-item-description mb-0">
+                                            {{ $item->description }}
+                                        </p>
+
+                                        <!-- <form method="POST" action="{{ route('cart.add') }}" class="d-flex align-items-center gap-2 mt-3">
+                                            @csrf
+                                            <input type="hidden" name="menu_item_id" value="{{ $item->id }}">
+                                            <label class="visually-hidden" for="qty-{{ $item->id }}">Quantity for {{ $item->name }}</label> -->
+                                            <!-- <input type="number" id="qty-{{ $item->id }}" name="quantity" value="1" min="1" max="20" class="form-control form-control-sm" style="width:72px;"> 
+                                            <button type="submit" class="btn btn-aquila-gold btn-sm">Add to cart</button>
+                                        </form> -->
+
                                     </div>
                                 </article>
                             </div>

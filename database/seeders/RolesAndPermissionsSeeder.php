@@ -20,6 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage packages',
             'manage orders',
             'manage catering',
+            'manage reservations',
         ];
 
         foreach ($permissions as $permission) {
@@ -38,6 +39,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage packages',
             'manage orders',
             'manage catering',
+            'manage reservations',
         ]);
     }
 }

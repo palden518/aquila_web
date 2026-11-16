@@ -8,46 +8,22 @@ class AboutController extends Controller
 {
     public function index()
     {
-        $contentApproved = Setting::get('about_content_approved') === 'true';
-        $approvedSetting = static function (string $key, string $fallback) use ($contentApproved): string {
-            return $contentApproved
-                ? (Setting::get($key, $fallback) ?? $fallback)
-                : $fallback;
-        };
-
-        $stats = [];
-        if ($contentApproved) {
-            for ($index = 1; $index <= 3; $index++) {
-                $value = Setting::get("about_stat_{$index}_value");
-                $label = Setting::get("about_stat_{$index}_label");
-
-                if ($value !== null && trim($value) !== '' && $label !== null && trim($label) !== '') {
-                    $stats[] = [
-                        'value' => $value,
-                        'label' => $label,
-                    ];
-                }
-            }
-        }
-
         $content = [
-            'eyebrow' => $approvedSetting('about_eyebrow', 'Our story'),
-            'heading' => $approvedSetting('about_heading', 'About The Aquila'),
-            'intro' => $approvedSetting(
-                'about_intro',
-                'From business lunches to evening dining, The Aquila offers a refined yet welcoming space for our regulars, office professionals, and corporate guests.'
-            ),
-            'image' => 'images/about page/dining.webp',
-            'image_alt' => 'Restaurant dining area with tables and large windows',
-            'story_heading' => $approvedSetting('about_story_heading', 'Our story'),
-            'story_paragraph_1' => $approvedSetting(
-                'about_story_paragraph_1',
-                'The Aquila opened its doors in Brisbane City with a simple idea: bring Italian technique and Australian produce together on one menu, served in a room that feels equally right for a client lunch or a celebration dinner.'
-            ),
-            'story_paragraph_2' => $approvedSetting('about_story_paragraph_2', ''),
-            'story_image' => 'images/about page/outdoor.webp',
-            'story_image_alt' => 'Dining area with tables beside large windows and hanging plants',
-            'stats' => $stats,
+            'eyebrow' => Setting::get('about_eyebrow', 'Our story'),
+            'heading' => Setting::get('about_heading', 'Two decades of <span class="text-gold-italic">Brisbane hospitality</span>'),
+            'intro' => Setting::get('about_intro', "The Aquila has been a fixture of Brisbane's dining scene for over twenty years, bringing together Italian tradition and modern Australian produce for regulars, office professionals, and everyone in between."),
+            'image' => Setting::get('about_image', 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80'),
+
+            'story_heading' => Setting::get('about_story_heading', 'From a small kitchen to a Brisbane institution'),
+            'story_paragraph_1' => Setting::get('about_story_paragraph_1', 'The Aquila opened its doors in Brisbane City with a simple idea: bring Italian technique and Australian produce together on one menu, served in a room that feels equally right for a client lunch or a celebration dinner.'),
+            'story_paragraph_2' => Setting::get('about_story_paragraph_2', "Two decades on, that idea hasn't changed. Our kitchen still works with seasonal, local ingredients, our floor team still knows plenty of guests by name, and we still open our doors seven days a week for dining, drinks, and private events."),
+            'story_image' => Setting::get('about_story_image', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80'),
+
+            'stats' => [
+                ['value' => Setting::get('about_stat_1_value', '20+'), 'label' => Setting::get('about_stat_1_label', 'Years in Brisbane')],
+                ['value' => Setting::get('about_stat_2_value', '15k'), 'label' => Setting::get('about_stat_2_label', 'Guests served yearly')],
+                ['value' => Setting::get('about_stat_3_value', '7'), 'label' => Setting::get('about_stat_3_label', 'Days open a week')],
+            ],
         ];
 
         return view('about', compact('content'));

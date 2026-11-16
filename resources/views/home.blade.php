@@ -15,8 +15,10 @@
 
     {{-- Page styles --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="{{ asset('js/form-validation.js') }}" defer></script>
 </head>
 <body>
+    <x-cart-flash />
 
     {{-- ============================= NAVBAR ============================= --}}
     <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
@@ -38,8 +40,9 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}" href="{{ route('menu') }}">Menu</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('specials') ? 'active' : '' }}" href="{{ route('specials') }}">Specials &amp; packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}">Events &amp; catering</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a></li>
+                    <li class="nav-item"><x-cart-link /></li>
                 </ul>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-none d-lg-inline-block">Book a table</a>
                 <a href="{{ route('contact') }}#reserve" class="btn btn-aquila-gold d-lg-none">Book a table</a>
@@ -57,7 +60,7 @@
                     <p class="hero-copy">{{ $content['hero_copy'] }}</p>
                     <div class="hero-actions">
                         <a href="{{ route('menu') }}" class="btn btn-aquila-gold">View our menu</a>
-                        <a href="/contact" class="btn btn-aquila-outline">Make a reservation</a>
+                        <a href="#reserve" class="btn btn-aquila-outline">Make a reservation</a>
                     </div>
                 </div>
 
@@ -191,6 +194,11 @@
                                 <h3>{{ $weeklySpecial->name }}</h3>
                                 <p>{{ $weeklySpecial->description }}</p>
                                 <div class="special-price">{{ $weeklySpecial->display_price }} <span>per serve</span></div>
+                                <form method="POST" action="{{ route('cart.add') }}" class="mt-3 mb-2">
+                                    @csrf
+                                    <input type="hidden" name="menu_item_id" value="{{ $weeklySpecial->id }}">
+                                    <button type="submit" class="btn btn-aquila-gold">Add to order</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -262,7 +270,7 @@
             <span class="eyebrow">— Plan your visit —</span>
             <h2 class="cta-heading">Reserve your table or enquire about <span class="text-gold-italic">catering</span></h2>
             <p class="cta-copy">Open 7 days for dining, bar service, and events. Reach out for reservations, catering, or corporate functions.</p>
-            <a href="/contact" class="btn btn-aquila-gold">Get in touch</a>
+            <a href="#contact" class="btn btn-aquila-gold">Get in touch</a>
         </div>
     </section>
 

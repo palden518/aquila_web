@@ -11,6 +11,7 @@ A new catering / event enquiry has come in through the website.
 | **Event date** | {{ $enquiry->event_date->format('d M Y') }} |
 | **Guest count** | {{ $enquiry->guest_count }} |
 | **Event type** | {{ $enquiry->event_type ? ucfirst(str_replace('_', ' ', $enquiry->event_type)) : '—' }} |
+| **Package** | {{ $enquiry->package?->name ?? 'Not sure yet' }} |
 
 @if ($enquiry->message)
 **Message:**
