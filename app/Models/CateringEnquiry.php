@@ -25,6 +25,7 @@ class CateringEnquiry extends Model
     protected $casts = [
         'event_date' => 'date',
         'guest_count' => 'integer',
+        'confirmed_at' => 'datetime',
     ];
 
     const STATUSES = ['new', 'contacted', 'confirmed', 'declined', 'completed'];
@@ -37,5 +38,25 @@ class CateringEnquiry extends Model
     public function package()
     {
         return $this->belongsTo(Package::class);
+    }
+
+    /**
+     * AQL-35: a confirmed enquiry is a booked event.
+     */
+    public function isBooked(): bool
+    {
+        return $this->status === 'confirmed';
+    }
+
+    /**
+     * AQL-35/AQL-34: is another event already confirmed for this date?
+     */
+    public function dateAlreadyBooked(): bool
+    {
+        
+        return static::where('status', 'confirmed')
+            ->whereDate('event_date', $this->event_date)
+            ->where('id', '!=', $this->id)
+            ->exists();
     }
 }

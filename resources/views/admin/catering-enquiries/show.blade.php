@@ -56,13 +56,22 @@
                 <h2 class="h5">Status</h2>
                 <p><span class="badge badge-status-{{ $enquiry->status }}">{{ ucfirst($enquiry->status) }}</span></p>
 
+                {{-- AQL-35: a confirmed enquiry is a booked event --}}
+                @if ($enquiry->isBooked())
+                    <div class="alert alert-success py-2 mb-3">
+                        <strong>Booked event</strong><br>
+                        Confirmed {{ $enquiry->confirmed_at?->format('d M Y, g:ia') ?? '' }}
+                    </div>
+                @endif
+
+                
+
                 <form method="POST" action="{{ route('admin.catering-enquiries.status', $enquiry) }}">
                     @csrf
                     @method('PATCH')
                     <select name="status" class="form-select mb-2">
                         @foreach ($statuses as $status)
-                            <option value="{{ $status }}" {{ $enquiry->status === $status ? 'selected' : '' }}>
-                                {{ ucfirst($status) }}</option>
+                            <option value="{{ $status }}" {{ $enquiry->status === $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
                         @endforeach
                     </select>
                     <button type="submit" class="btn btn-admin-gold w-100">Update status</button>

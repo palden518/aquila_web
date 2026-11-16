@@ -31,14 +31,42 @@ class CateringEnquiryController extends Controller
         ]);
     }
 
+    /**
+     * AQL-35: confirming an enquiry turns it into a booked event.
+     * - Blocks confirming a second event on an already-booked date.
+     * - Records confirmed_at when it becomes a booking.
+     * - Keeps confirmed_at when the event is completed (conversion history);
+     *   clears it if the booking is declined or moved back.
+     */
     public function updateStatus(Request $request, CateringEnquiry $cateringEnquiry): RedirectResponse
     {
         $data = $request->validate([
             'status' => ['required', 'in:' . implode(',', CateringEnquiry::STATUSES)],
         ]);
 
-        $cateringEnquiry->update($data);
+        $newStatus = $data['status'];
 
-        return back()->with('status', 'Enquiry status updated.');
+        if ($newStatus === 'confirmed' && ! $cateringEnquiry->isBooked()) {
+            if ($cateringEnquiry->dateAlreadyBooked()) {
+                return back()->withErrors([
+                    'status' => 'Another event is already confirmed for '
+                        . $cateringEnquiry->event_date->format('d M Y')
+                        . '. Decline or reschedule it before confirming this one.',
+                ]);
+            }
+
+            $cateringEnquiry->confirmed_at = now();
+        }
+
+        if (! in_array($newStatus, ['confirmed', 'completed'], true)) {
+            $cateringEnquiry->confirmed_at = null;
+        }
+
+        $cateringEnquiry->status = $newStatus;
+        $cateringEnquiry->save();
+
+        $message = $cateringEnquiry->isBooked() ? 'Enquiry confirmed as a booked event.' : 'Enquiry status updated.';
+
+        return back()->with('status', $message);
     }
 }
