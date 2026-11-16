@@ -1,5 +1,5 @@
 ## James Cook University
-## ICT1 Project - Aquila Cafe Website Redesign
+## ICT Project 2 - Aquila Cafe Website Redesign
 
 ### Project Instructions
 
