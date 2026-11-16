@@ -31,17 +31,6 @@
 </head>
 
 <body class="aquila-menu-page">
-    @php
-        $categoryImages = [
-            'breakfast' => 'breakfast.webp',
-            'lunch' => 'lunch.webp',
-            'mains' => 'mains.webp',
-            'salads' => 'salads.webp',
-            'pizza' => 'pizza.webp',
-            'sharing' => 'sharing.webp',
-        ];
-    @endphp
-
     {{-- Navbar --}}
      <nav class="navbar navbar-expand-lg aquila-navbar sticky-top">
         <div class="container">
@@ -170,20 +159,6 @@
                         </div>
                     </div>
 
-                    @php
-                        $categoryImage = $categoryImages[$category->slug] ?? null;
-                        $categoryImagePath = $categoryImage
-                            ? 'images/menu-categories/' . $categoryImage
-                            : null;
-                    @endphp
-                    @if ($categoryImagePath && is_file(public_path($categoryImagePath)))
-                        <img
-                            src="{{ asset($categoryImagePath) }}"
-                            alt="{{ $category->name }} dishes at Aquila"
-                            class="menu-category-image"
-                        >
-                    @endif
-
                     {{-- Chef's feature card, shown once on the Mains section --}}
                     @if ($category->slug === 'mains')
                         <div class="card featured-menu-card border-0 mb-4">
@@ -218,29 +193,53 @@
 
                         @forelse ($category->availableItems as $item)
 
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <article class="card menu-item-card h-100 border-0">
+                                    <div class="menu-item-card-layout">
+                                        @if ($item->menu_photo)
+                                            <figure class="menu-item-photo">
+                                                <img
+                                                    class="menu-item-image"
+                                                    src="{{ $item->menu_photo['src'] }}"
+                                                    alt="{{ $item->menu_photo['alt'] }}"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                >
+                                                @if ($item->menu_photo['caption'])
+                                                    <figcaption class="menu-item-photo-caption">
+                                                        {{ $item->menu_photo['caption'] }}
+                                                    </figcaption>
+                                                @endif
+                                            </figure>
+                                        @else
+                                            <div
+                                                class="menu-item-image-fallback"
+                                                role="img"
+                                                aria-label="Photo not yet available for {{ $item->name }}"
+                                            >
+                                                <svg aria-hidden="true" viewBox="0 0 48 48" focusable="false">
+                                                    <rect x="5" y="8" width="38" height="32" rx="4"></rect>
+                                                    <circle cx="17" cy="19" r="3"></circle>
+                                                    <path d="m8 35 11-11 7 7 5-5 9 9"></path>
+                                                </svg>
+                                                <span>Photo coming soon</span>
+                                            </div>
+                                        @endif
 
-                                    <div class="card-body p-4">
-
-                                        <div class="d-flex justify-content-between gap-3">
-
-                                            <h3 class="menu-item-title mb-2">
-                                                {{ $item->name }}
-                                            </h3>
-
-                                            <span class="menu-item-price">
-                                                {{ $item->display_price }}
-                                            </span>
-
+                                        <div class="menu-item-copy">
+                                            <div class="menu-item-heading">
+                                                <h3 class="menu-item-title mb-2">
+                                                    {{ $item->name }}
+                                                </h3>
+                                                <span class="menu-item-price">
+                                                    {{ $item->display_price }}
+                                                </span>
+                                            </div>
+                                            <p class="menu-item-description mb-0">
+                                                {{ $item->description }}
+                                            </p>
                                         </div>
-
-                                        <p class="menu-item-description mb-0">
-                                            {{ $item->description }}
-                                        </p>
-
                                     </div>
-
                                 </article>
                             </div>
 
